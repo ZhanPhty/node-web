@@ -1,0 +1,64 @@
+/*
+ * ant-design 主题全局变量
+ * @link https://github.com/vueComponent/ant-design-vue/blob/master/components/style/themes/default.less
+ */
+
+ // -------- 引入官方 less 样式入口文件 -----------
+@import "~ant-design-vue/dist/antd.less";
+
+// -------- Colors -----------
+@primary-color: @primary;
+
+// -------- Input -----------
+@input-height-base : 40px;
+@input-height-lg : 48px;
+@input-height-sm : 32px;
+
+// -------- Button -----------
+@btn-height-base : 38px;
+@btn-height-lg : 46px;
+@btn-height-sm : 30px;
+
+// -------- Table -----------
+@table-padding-vertical: 12px;
+@table-row-hover-bg: #edf7fe;
+
+// -------- menu.dark --------
+@menu-dark-bg: @menuBg;
+@menu-dark-submenu-bg: @menuSubBg;
+
+/*
+ * -------- 定制框架样式 -----------
+ */
+
+// 去除ant框架button点击的光晕效果
+button[ant-click-animating-without-extra-node]:after {
+  border: 0 none;
+  opacity: 0;
+  animation:none 0 ease 0 1 normal;
+}
+
+// pagination
+.ant-pagination-options {
+  .ant-select-selection--single {
+    height: 32px;
+  }
+
+  .ant-select-selection__rendered {
+    line-height: 32px;
+  }
+
+  .ant-pagination-options-quick-jumper,
+  .ant-pagination-options-quick-jumper input {
+    height: 32px;
+    line-height: 32px;
+  }
+}
+
+// 表单错误提示
+.has-error {
+  .ant-form-explain {
+    font-size: 12px;
+    margin-top: 1px;
+  }
+}
