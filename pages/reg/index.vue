@@ -81,7 +81,9 @@
         </a-checkbox>
       </a-form-item>
       <a-form-item class="reg-btn">
-        <a-button type="primary" :loading="confirmLoad" @click="handleReg">注 册</a-button>
+        <a-button type="primary" :loading="confirmLoad" @click="handleReg">
+          注 册
+        </a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -90,7 +92,7 @@
 <script>
 import md5 from 'js-md5'
 import { userRegister } from 'api/user'
-import pictureVerifier from 'components/PictureVerifier'
+import pictureVerifier from 'components/verify/PictureVerifier'
 
 export default {
   components: {

@@ -14,54 +14,26 @@
 // layout
 //----------------------------------------------------- 
 .layout-content-mian {
-  min-width: @large;
-  max-width: @xLarge;
+  min-width: @small;
+  max-width: @large;
   margin: auto;
   padding-left: @gap;
   padding-right: @gap;
+}
+
+.layout-content-mian__big {
+  .layout-content-mian;
+  max-width: @xLarge;
 }
 
 .layout-content-body {
   min-height: 80vh;
 }
 
-.layout-search-wrapper {
-  .ant-form-item {
-    display: flex;
-    margin-bottom: 20px;
-    margin-right: 0;
-  }
-
-  .ant-form-item-label {
-    display: inline-block;
-    vertical-align: top;
-    line-height: 38px;
-  }
-
-  .ant-form-item-control {
-    line-height: 36px;
-  }
-
-  .ant-form-item-control-wrapper {
-    flex: 1 1;
-    display: inline-block;
-    vertical-align: top;
-  }
-}
-
-.layout-search-btns {
-  .ant-btn + .ant-btn {
-    margin-left: 16px;
-  }
-}
-
-.layout-page-operator {
-  margin-bottom: 16px;
-  text-align: right;
-}
-
+//----------------------------------------------------- 
 // 定制ant的modal样式
-.manage-modal-cat {
+//----------------------------------------------------- 
+.layout-modal-theme {
   width: 480px !important;
 
   .ant-modal-header {
@@ -95,5 +67,9 @@
         margin-left: 12px;
       }
     }
+  }
+
+  &__740 {
+    width: 740px !important;
   }
 }

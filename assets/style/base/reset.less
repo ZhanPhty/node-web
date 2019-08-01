@@ -95,8 +95,10 @@ a {
   text-decoration: none;
   color: nth(@colorLink, 1);
 
-  &:active {
+  &:active,
+  &:focus {
     outline: 0; // 3
+    text-decoration: none;
   }
 }
 

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+//-----------------------------------------------------	
+// media-queries.less, 响应式媒体查询段点
+// 引用 utils/breakpoints.less 文件变量
+// ‘media’命名空间开头的样式
+//-----------------------------------------------------	
+
+// 导航栏可折叠的菜单
+.media-header-trigger {
+  display: none;
+
+  @media @mobile {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+// 导航栏正常形态菜单
+.media-header-tab {
+  display: inline-block;
+  vertical-align: middle;
+
+  @media @mobile {
+    display: none;
+  }
+
+  .media-header-icon {
+    @media @desktop {
+      display: none;
+    }
+  }
+
+  .media-header-title {
+    @media @tablet {
+      display: none;
+    }
+  }
+}
+
+.media-header-search {
+  &.ant-input-affix-wrapper {
+    @media @tablet {
+      width: 120px;
+    }
+  }
+}

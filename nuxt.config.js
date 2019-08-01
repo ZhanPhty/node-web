@@ -79,7 +79,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {
+    extend(config) {
       // 别名
       config.resolve.alias.components = resolve('components')
       config.resolve.alias.assets = resolve('assets')

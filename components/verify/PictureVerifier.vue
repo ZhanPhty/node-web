@@ -1,6 +1,6 @@
 <template>
   <div class="ver-pic-box">
-    <div :class="className" :style="{ height: `${height}px` }" @click="loadPicVer" v-html="svg"></div>
+    <div :class="className" :style="{ height: `${height}px` }" @click="loadPicVer" v-html="svg" />
   </div>
 </template>
 

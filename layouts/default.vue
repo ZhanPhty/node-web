@@ -1,55 +1,76 @@
 <template>
-  <div>
-    <nuxt />
-  </div>
+  <a-layout class="home-content-layout">
+    <a-affix @change="handleNavAffix">
+      <a-layout-header class="home-content-header" :class="isFixed ? 'home-content-header__fixed' : ''">
+        <page-header theme="light" class="layout-content-mian__big" />
+      </a-layout-header>
+    </a-affix>
+    <a-layout-content class="home-content-main">
+      <nuxt />
+    </a-layout-content>
+  </a-layout>
 </template>
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+<script>
+import pageHeader from 'components/nav/PageHeader'
+
+export default {
+  components: {
+    pageHeader
+  },
+  data() {
+    return {
+      isFixed: false
+    }
+  },
+  methods: {
+    handleNavAffix(e) {
+      this.isFixed = e
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.home-content-layout {
+  .home-content-header {
+    position: relative;
+    z-index: 29;
+    transition: ease-in-out 0.2s;
+    padding: 0;
+    line-height: 58px;
+
+    &.home-content-header__fixed {
+      box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 8px;
+      background-color: #fff;
+    }
+
+    &:hover {
+      .home-content-header__fixed;
+    }
+  }
+}
+</style>
+
+<style lang="less">
+.home-content-header__fixed {
+  .header-top__opt::after {
+    content: '';
+    display: none;
+  }
+
+  .header-top__search {
+    &.ant-input-affix-wrapper {
+      .ant-input {
+        border-color: transparent;
+      }
+    }
+  }
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.home-content-header {
+  &:hover {
+    .home-content-header__fixed;
+  }
 }
 </style>

@@ -23,9 +23,14 @@
 @table-padding-vertical: 12px;
 @table-row-hover-bg: #edf7fe;
 
-// -------- menu.dark --------
-@menu-dark-bg: @menuBg;
-@menu-dark-submenu-bg: @menuSubBg;
+// -------- Layout -----------
+@layout-body-background : transparent;
+@layout-header-background : @colorBg;
+@layout-header-height : 60px;
+@layout-header-padding : 0 20px;
+
+// -------- From ------------
+@form-item-margin-bottom: 20px;
 
 /*
  * -------- 定制框架样式 -----------
@@ -42,6 +47,8 @@ button[ant-click-animating-without-extra-node]:after {
 .ant-pagination-options {
   .ant-select-selection--single {
     height: 32px;
+    margin-right: 10px;
+    margin-left: 10px;
   }
 
   .ant-select-selection__rendered {
@@ -52,6 +59,26 @@ button[ant-click-animating-without-extra-node]:after {
   .ant-pagination-options-quick-jumper input {
     height: 32px;
     line-height: 32px;
+  }
+}
+
+.ant-pagination.mini {
+  .ant-select-sm {
+    .ant-select-selection--single {
+      height: 24px;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  
+    .ant-select-selection__rendered {
+      line-height: 24px;
+    }
+  }
+  
+  .ant-pagination-options-quick-jumper,
+  .ant-pagination-options-quick-jumper input {
+    height: 24px;
+    line-height: 24px;
   }
 }
 

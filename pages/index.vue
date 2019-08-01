@@ -1,14 +1,16 @@
 <template>
   <div class="container">
     <div>
-      <logo />
-      <h1 class="title">node</h1>
+      <h1 class="title">
+        node
+      </h1>
       <h2 class="subtitle">
         My sublime Nuxt.js project
-        <span v-html="img"></span>
       </h2>
       <div class="links">
-        <a-button @click="onReg">注册</a-button>
+        <a-button @click="onReg">
+          注册
+        </a-button>
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
         <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
       </div>
@@ -17,32 +19,12 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import axios from 'axios'
-
 export default {
-  components: {
-    Logo
-  },
-  asyncData(context) {
-    return axios.post(`/api/blogapi/login`).then(res => {
-      return { img: res.data }
-    })
-  },
+  components: {},
+  asyncData(context) {},
   methods: {
     onReg() {
       console.log('点击了注册')
-      axios
-        .post(`/api/blogapi/reg`, {
-          account: 'test',
-          password: '111111',
-          captcha: '4fmc',
-          email: '2323@qq.com',
-          nick: '小辉哥'
-        })
-        .then(res => {
-          console.log(res)
-        })
     }
   }
 }
@@ -51,7 +33,7 @@ export default {
 <style>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 120vh;
   display: flex;
   justify-content: center;
   align-items: center;
