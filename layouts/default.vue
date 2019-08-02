@@ -11,17 +11,25 @@
           <nuxt />
         </div>
       </a-layout-content>
+      <a-layout-footer class="page-footer">
+        <page-footer theme="light" class="layout-content-mian" />
+        <page-global />
+      </a-layout-footer>
     </a-layout>
   </a-locale-provider>
 </template>
 
 <script>
-import pageHeader from 'components/nav/PageHeader'
+import pageHeader from 'components/common/PageHeader'
+import pageFooter from 'components/common/PageFooter'
+import pageGlobal from 'components/common/PageGlobal'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 
 export default {
   components: {
-    pageHeader
+    pageHeader,
+    pageFooter,
+    pageGlobal
   },
   data() {
     return {
@@ -54,6 +62,10 @@ export default {
     &:hover {
       .page-header__fixed;
     }
+  }
+
+  .page-footer {
+    text-align: center;
   }
 }
 </style>

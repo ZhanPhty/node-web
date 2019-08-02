@@ -1,7 +1,7 @@
 <template>
   <div class="header-top clearfix">
     <nuxt-link class="header-top__logo" to="/">
-      <img class="header-top__logo" :src="navLogo" alt="小灰哥" />
+      <img :src="navLogo" alt="小灰哥" />
     </nuxt-link>
     <div class="header-top__opt">
       <a-button class="header-top__btns">登录</a-button>
@@ -44,7 +44,7 @@
 
 <script>
 import navLogo from 'assets/images/nav-logo.png'
-import headerMenu from 'components/nav/HeaderMenu'
+import headerMenu from 'components/common/HeaderMenu'
 
 export default {
   components: {
@@ -65,9 +65,9 @@ export default {
   overflow: hidden;
 
   &__logo {
-    height: 58px;
+    height: 36px;
     float: left;
-    margin-right: 4px;
+    margin-right: 24px;
 
     img {
       height: 100%;
