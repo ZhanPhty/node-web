@@ -34,7 +34,9 @@
       </div>
       <!-- 右侧操作按钮 -->
       <div class="header-top__right">
-        <a-button type="primary" icon="edit">写文章</a-button>
+        <a-button type="primary" icon="edit">
+          <span class="media-header-title">写文章</span>
+        </a-button>
       </div>
     </div>
   </div>
@@ -103,7 +105,7 @@ export default {
 
   &__right {
     float: right;
-    margin-right: 10px;
+    margin-right: 4px;
     text-align: right;
   }
 }
