@@ -64,6 +64,10 @@ export default {
     }
   }
 
+  .page-main {
+    min-height: 74vh;
+  }
+
   .page-footer {
     text-align: center;
   }

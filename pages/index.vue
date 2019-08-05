@@ -1,52 +1,86 @@
 <template>
-  <a-row class="home-container" type="flex" :gutter="30">
-    <a-col class="home-container-main" :xs="24" :sm="24" :md="16" :xl="17">
+  <page-layout class="home-container">
+    <div slot="main">
       <a-carousel class="home-container-banner" autoplay>
         <div class="home-container-banner__item"><h3>1</h3></div>
         <div class="home-container-banner__item"><h3>2</h3></div>
       </a-carousel>
-      <div class="home-container-hd">
+      <!-- <div class="home-container-hd">
         <div class="home-container-hd__alert">
           新的公告！
         </div>
-      </div>
+      </div> -->
       <div class="home-container-list">
+        <list-item :loading="loading" :busy="!busyLoad" :data-source="listData" />
+      </div>
+    </div>
+    <!-- 左侧 -->
+    <div slot="aside">
+      <div class="home-aside">
+        <h2 class="home-aside__title">热门标签</h2>
         <a-skeleton :loading="loading" active>
-          <a-list item-layout="vertical" size="large" :data-source="listData">
-            <a-list-item slot="renderItem" key="item.id" slot-scope="item">
-              <a-list-item-meta>
-                <a slot="title" target="_blank" :href="item.href">{{ item.title }}</a>
-                <template slot="description">
-                  <div class="home-container-desc">{{ item.content }}</div>
-                </template>
-              </a-list-item-meta>
-              <div slot="extra">
-                <div
-                  class="home-container-cover"
-                  :style="{
-                    backgroundImage: `url(
-                      'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png'
-                    )`
-                  }"
-                ></div>
-              </div>
-              <div slot="actions">
-                2
-              </div>
-            </a-list-item>
-            <a-skeleton v-if="!busyLoad" :loading="true" active>23232 </a-skeleton>
-            <div slot="footer">
-              <a-button class="home-container-more" block>加载更多</a-button>
-            </div>
-          </a-list>
+          <ul class="home-aside__tag">
+            <li class="home-aside__tag--item"><a>#php</a></li>
+            <li class="home-aside__tag--item"><a>#less</a></li>
+            <li class="home-aside__tag--item"><a>#服务器</a></li>
+            <li class="home-aside__tag--item"><a>#博客</a></li>
+            <li class="home-aside__tag--item"><a>#精选</a></li>
+            <li class="home-aside__tag--item"><a>#完美编译</a></li>
+            <li class="home-aside__tag--item"><a>#开源</a></li>
+            <li class="home-aside__tag--item"><a>#精选</a></li>
+            <li class="home-aside__tag--item"><a>#完美编译</a></li>
+            <li class="home-aside__tag--item"><a>#开源</a></li>
+          </ul>
         </a-skeleton>
       </div>
-    </a-col>
-    <a-col class="home-container-aside" :xs="0" :sm="0" :md="8" :xl="7"><span>3323232</span> </a-col>
-  </a-row>
+      <div class="home-aside">
+        <h2 class="home-aside__title">文章分类</h2>
+        <a-skeleton :loading="loading" active>
+          <ul class="home-aside__sort">
+            <li class="home-aside__sort--item">
+              <a>生活</a>
+              <span>(20)</span>
+            </li>
+            <li class="home-aside__sort--item">
+              <a>摄影</a>
+              <span>(50)</span>
+            </li>
+            <li class="home-aside__sort--item">
+              <a>技术</a>
+              <span>(9)</span>
+            </li>
+            <li class="home-aside__sort--item">
+              <a>CSS</a>
+              <span>(10)</span>
+            </li>
+          </ul>
+        </a-skeleton>
+      </div>
+      <div class="home-aside">
+        <a-affix :offset-top="90">
+          <h2 class="home-aside__title">热门文章</h2>
+          <a-skeleton :loading="loading" active>
+            <ul class="home-aside__article">
+              <li class="home-aside__article--item">
+                <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
+                <p class="home-aside__article--opt">209阅读<span>•</span>5评论</p>
+              </li>
+              <li class="home-aside__article--item">
+                <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
+                <p class="home-aside__article--opt">209阅读<span>•</span>1评论</p>
+              </li>
+            </ul>
+          </a-skeleton>
+        </a-affix>
+      </div>
+    </div>
+  </page-layout>
 </template>
 
 <script>
+import listItem from 'components/list/listItem'
+import pageLayout from 'components/common/PageLayout'
+
 const listData = []
 for (let i = 0; i < 10; i++) {
   listData.push({
@@ -60,6 +94,10 @@ for (let i = 0; i < 10; i++) {
 }
 
 export default {
+  components: {
+    listItem,
+    pageLayout
+  },
   data() {
     return {
       listData,
@@ -77,13 +115,6 @@ export default {
 }
 
 .home-container {
-  padding-bottom: @gap + 10;
-
-  &-main,
-  &-aside {
-    padding-top: @gap + 10;
-  }
-
   &-banner {
     .home-box-show;
     border-radius: @radiusBase;
@@ -94,120 +125,128 @@ export default {
       height: 240px;
     }
   }
-}
 
-.home-container-hd {
-  position: relative;
-  height: 40px;
-  line-height: 40px;
-  margin-top: @gap;
-
-  & > h2 {
-    font-size: 16px;
+  &-hd {
+    position: relative;
+    height: 40px;
     line-height: 40px;
-    color: @colorText;
-    font-weight: bold;
-    display: inline-block;
-  }
+    margin-top: @gap;
 
-  &__alert {
-    float: right;
-    max-width: 350px;
-    padding: 0 20px;
-    color: #6b3612;
-    background-color: #fff7e7;
-    border-radius: 40px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
-
-.home-container-desc {
-  max-height: 44px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  /* autoprefixer: off*/
-  -webkit-box-orient: vertical;
-}
-
-.home-container-cover {
-  width: 138px;
-  height: 90px;
-  background-size: cover;
-  background-color: #eaedf2;
-}
-
-.home-container-more {
-  border-radius: 100px;
-  margin-top: 20px;
-  border: 0;
-  background-color: #dae0e5;
-  color: @colorText;
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-.home-container-list {
-  margin-top: @gap;
-}
-</style>
-
-<style lang="less">
-.home-container-list {
-  .ant-list-item-extra-wrap {
-    align-items: center;
-  }
-
-  .ant-list-item-extra {
-    margin-left: 20px;
-  }
-
-  .ant-list-item-meta {
-    &-title {
-      font-size: 18px;
+    & > h2 {
+      font-size: 16px;
+      line-height: 40px;
+      color: @colorText;
       font-weight: bold;
-      line-height: 1.5;
+      display: inline-block;
+    }
 
-      & > a {
-        color: @colorText;
+    &__alert {
+      float: right;
+      max-width: 350px;
+      padding: 0 20px;
+      color: #6b3612;
+      background-color: #fff7e7;
+      border-radius: 40px;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 
-        &:visited {
-          color: #999;
-        }
+  &-list {
+    margin-top: @gap;
+  }
+}
 
-        &:hover {
-          text-decoration: underline;
-        }
+.home-aside {
+  & + .home-aside {
+    margin-top: 30px;
+  }
+
+  &__title {
+    font-size: 14px;
+    color: #868686;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  // 标签
+  &__tag {
+    &--item {
+      display: inline-block;
+      margin-bottom: 8px;
+      margin-right: 6px;
+    }
+
+    a {
+      display: inline-block;
+      background-color: #ecedee;
+      color: #9b9b9b;
+      text-decoration: none;
+      padding: 3px 7px 4px 7px;
+      border-radius: 2px;
+      font-size: 12px;
+      transition: all 0.3s;
+
+      &:hover {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        transition: all 0.3s;
       }
     }
   }
 
-  .ant-skeleton {
-    .ant-skeleton-title {
-      background-color: #ddd;
+  // 分类
+  &__sort {
+    &--item {
+      display: inline-block;
+      width: 48%;
+      margin-bottom: 6px;
     }
 
-    .ant-skeleton-content {
-      padding-right: 166px;
-      position: relative;
+    a {
+      color: @colorText;
 
-      &::after {
-        content: '';
-        position: absolute;
-        top: 18%;
-        right: 0;
-        display: inline-block;
-        width: 138px;
-        height: 90px;
-        background: linear-gradient(90deg, #ececec 25%, #e0e0e0 37%, #ececec 63%);
-        animation: ant-skeleton-loading 1.4s ease infinite;
-        background-size: 400% 100%;
+      &:hover {
+        color: @primary;
+      }
+    }
+
+    span {
+      color: #999;
+    }
+  }
+
+  // 文章
+  &__article {
+    &--item {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    &--opt {
+      color: #9b9b9b;
+      font-size: 12px;
+      margin-top: 6px;
+
+      span {
+        color: #ccc;
+        margin: 0 8px;
+      }
+    }
+
+    a {
+      color: @colorText;
+      // display: block;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

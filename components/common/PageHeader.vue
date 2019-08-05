@@ -34,9 +34,11 @@
       </div>
       <!-- 右侧操作按钮 -->
       <div class="header-top__right">
-        <a-button type="primary" icon="edit">
-          <span class="media-header-title">写文章</span>
-        </a-button>
+        <nuxt-link to="/writer">
+          <a-button type="primary" icon="edit">
+            <span class="media-header-title">写文章</span>
+          </a-button>
+        </nuxt-link>
       </div>
     </div>
   </div>

@@ -25,6 +25,12 @@
     bottom: 40px;
   }
 
+  .global-main-left {
+    .global-main-right;
+    left: 30px;
+    right: initial;
+  }
+
   .ant-back-top {
     position: initial;
     width: @width;
@@ -41,7 +47,7 @@
     text-align: center;
     font-size: 20px;
     margin-top: 10px;
-    box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
+    box-shadow: 0px 1px 2px rgba(26, 26, 26, 0.1);
     cursor: pointer;
 
     &:hover {
