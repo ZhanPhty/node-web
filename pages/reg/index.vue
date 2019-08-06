@@ -1,13 +1,13 @@
 <template>
   <div class="reg-content-mian">
     <a-form :form="formValid">
-      <a-form-item v-bind="formItemLayout" label="用户名">
+      <a-form-item v-bind="formItemLayout">
         <a-input
           v-decorator="['account', { rules: [{ required: true, message: '请输入注册的用户名' }] }]"
           placeholder="请输入注册的用户名"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="邮箱">
+      <!-- <a-form-item v-bind="formItemLayout" label="邮箱">
         <a-input
           v-decorator="[
             'email',
@@ -17,8 +17,8 @@
           ]"
           placeholder="请输入邮箱"
         />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="密码">
+      </a-form-item> -->
+      <a-form-item v-bind="formItemLayout">
         <a-input
           v-decorator="[
             'password',
@@ -35,7 +35,7 @@
           @blur="handleConfirmBlur"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="确认密码">
+      <a-form-item v-bind="formItemLayout">
         <a-input
           v-decorator="[
             'confirm',
@@ -47,10 +47,7 @@
           type="password"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="昵称">
-        <a-input v-decorator="['nick']" placeholder="请输入昵称" />
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="验证码">
+      <a-form-item v-bind="formItemLayout">
         <a-row :gutter="8">
           <a-col :span="16">
             <a-input
@@ -68,7 +65,7 @@
           </a-col>
         </a-row>
       </a-form-item>
-      <a-form-item v-bind="formItemLayout" label="用户协议">
+      <a-form-item v-bind="formItemLayout">
         <a-checkbox
           v-decorator="[
             'agreement',
@@ -95,6 +92,7 @@ import { userRegister } from 'api/user'
 import pictureVerifier from 'components/verify/PictureVerifier'
 
 export default {
+  layout: 'account',
   components: {
     pictureVerifier
   },
