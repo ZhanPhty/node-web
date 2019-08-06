@@ -1,13 +1,13 @@
 <template>
-  <div class="reg-content-mian">
+  <div class="reg-mian">
     <a-form :form="formValid">
-      <a-form-item v-bind="formItemLayout">
+      <a-form-item>
         <a-input
           v-decorator="['account', { rules: [{ required: true, message: '请输入注册的用户名' }] }]"
           placeholder="请输入注册的用户名"
         />
       </a-form-item>
-      <!-- <a-form-item v-bind="formItemLayout" label="邮箱">
+      <a-form-item>
         <a-input
           v-decorator="[
             'email',
@@ -17,8 +17,8 @@
           ]"
           placeholder="请输入邮箱"
         />
-      </a-form-item> -->
-      <a-form-item v-bind="formItemLayout">
+      </a-form-item>
+      <a-form-item>
         <a-input
           v-decorator="[
             'password',
@@ -35,7 +35,7 @@
           @blur="handleConfirmBlur"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout">
+      <a-form-item>
         <a-input
           v-decorator="[
             'confirm',
@@ -47,38 +47,26 @@
           type="password"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayout">
-        <a-row :gutter="8">
-          <a-col :span="16">
-            <a-input
-              v-decorator="[
-                'captcha',
-                {
-                  rules: [{ required: true, message: '请输入图片验证码' }]
-                }
-              ]"
-              placeholder="请输入验证码"
-            />
-          </a-col>
-          <a-col :span="8">
-            <picture-verifier ref="picVer" />
-          </a-col>
-        </a-row>
-      </a-form-item>
-      <a-form-item v-bind="formItemLayout">
-        <a-checkbox
+      <a-form-item>
+        <a-input
           v-decorator="[
-            'agreement',
+            'captcha',
             {
-              rules: [{ required: true, message: '请输入阅读并勾选注册协议' }]
+              rules: [{ required: true, message: '请输入图片验证码' }]
             }
           ]"
-        >
-          我已阅读并同意<a href="">《用户注册协议》</a>
-        </a-checkbox>
+          placeholder="请输入验证码"
+        />
+        <div class="reg-verify">
+          <picture-verifier ref="picVer" />
+        </div>
+      </a-form-item>
+      <a-form-item class="reg-login">
+        已有账号？
+        <nuxt-link to="/login">去登陆</nuxt-link>
       </a-form-item>
       <a-form-item class="reg-btn">
-        <a-button type="primary" :loading="confirmLoad" @click="handleReg">
+        <a-button type="primary" block :loading="confirmLoad" @click="handleReg">
           注 册
         </a-button>
       </a-form-item>
@@ -99,16 +87,6 @@ export default {
   data() {
     return {
       confirmDirty: false,
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 5 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 19 }
-        }
-      },
       formValid: this.$form.createForm(this),
       confirmLoad: false
     }
@@ -157,9 +135,8 @@ export default {
           })
             .then(res => {
               this.confirmLoad = false
-              console.log(res)
-              console.log(md5(password))
-              // this.$router.push(this.$config.homeName)
+              this.$message.success('注册成功, 现在可以登录了！')
+              this.$router.push('/')
             })
             .catch(() => {
               this.confirmLoad = false
@@ -171,18 +148,23 @@ export default {
 }
 </script>
 
+<style lang="less" scoped>
+.reg-verify {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  background-color: #f0f0f0;
+}
+
+.reg-login {
+  color: #aaa;
+}
+</style>
+
 <style lang="less">
-.reg-content-mian {
-  width: 440px;
-  margin: 50px auto 10px auto;
-
-  .reg-btn {
-    text-align: center;
-
-    .ant-btn {
-      min-width: 120px;
-      margin-left: 20px;
-    }
+.reg-login {
+  .ant-form-item-control {
+    line-height: 30px;
   }
 }
 </style>

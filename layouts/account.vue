@@ -1,17 +1,21 @@
 <template>
   <a-layout class="account-content">
-    <a-layout-content class="account-main">
+    <a-layout-content class="layout-content-mian">
       <div class="account-layout">
         <div class="account-layout-logo">
-          <nuxt-link class="account-layout-logo__img" to="/">
-            <img :src="navLogo" alt="小灰哥" />
+          <nuxt-link to="/">
+            <div class="account-layout-logo__img">
+              <img :src="navLogo" alt="小灰哥" />
+            </div>
+            <p class="account-layout-logo__hd">
+              <span>WEB Design</span>
+              <span class="account-layout-logo__tip">爱生活，爱摄影</span>
+            </p>
           </nuxt-link>
-          <p class="account-layout-logo__hd">
-            <span>Ant Design</span>
-            <span class="account-layout-logo__tip">爱生活，爱摄影</span>
-          </p>
         </div>
-        <nuxt />
+        <div class="account-layout-cnt">
+          <nuxt />
+        </div>
       </div>
     </a-layout-content>
     <a-layout-footer class="account-footer">
@@ -41,9 +45,8 @@ export default {
 
 <style lang="less" scoped>
 .account-content {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  min-height: 100%;
   background-image: url('../assets/images/login-bg.svg');
   background-size: 100%;
 }
@@ -72,7 +75,8 @@ export default {
   }
 
   &__hd {
-    font-size: 36px;
+    color: @colorText;
+    font-size: 32px;
     display: inline-block;
     vertical-align: middle;
     text-align: left;
@@ -82,6 +86,26 @@ export default {
     display: block;
     font-size: 13px;
     color: #9b9b9b;
+  }
+}
+
+.account-layout-cnt {
+  width: 440px;
+  background-color: #fff;
+  margin: 30px auto 20px auto;
+  padding: 30px 40px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+}
+</style>
+
+<style lang="less">
+.account-layout-cnt {
+  .ant-input {
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 0;
+    box-shadow: none !important;
   }
 }
 </style>

@@ -58,7 +58,7 @@ axios.interceptors.response.use(
 function errorState(response, showToast) {
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
-    !showToast && toast(response.data.msg || response.data.message || '网络异常')
+    !showToast && toast(response.data.errors || response.data.msg || '网络异常')
     return response.data
   } else {
     return {
@@ -73,7 +73,7 @@ function successState(res) {
   if (res.data && (res.data.code === 200 || res.data.code === 9100)) {
     return true
   } else {
-    res.data === 'object' && toast(res.data.msg || res.data.message || '网络异常')
+    res.data === 'object' && toast(res.data.errors || res.data.msg || '网络异常')
   }
 }
 

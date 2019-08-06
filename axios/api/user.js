@@ -43,3 +43,23 @@ export const userRegister = params => {
     params
   )
 }
+
+/**
+ * 用户登录
+ * @author 詹鹏辉
+ * @createdate 2019-08-06 16:56:33
+ * @param {Obj} params              参数
+ *              params.account      用户名
+ *              params.password     密码（不小于6位）
+ *              params.captcha      图形验证码
+ * @return
+ */
+export const userLogin = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/login',
+      method: 'post'
+    },
+    params
+  )
+}

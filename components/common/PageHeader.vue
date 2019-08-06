@@ -4,8 +4,12 @@
       <img :src="navLogo" alt="小灰哥" />
     </nuxt-link>
     <div class="header-top__opt">
-      <a-button class="header-top__btns">登录</a-button>
-      <a-button class="header-top__btns">注册</a-button>
+      <nuxt-link to="/login">
+        <a-button class="header-top__btns">登录</a-button>
+      </nuxt-link>
+      <nuxt-link to="/reg">
+        <a-button class="header-top__btns">注册</a-button>
+      </nuxt-link>
     </div>
     <div class="layout-content-mian clearfix">
       <!-- 折叠菜单 -->
