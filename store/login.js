@@ -10,7 +10,6 @@ import { userLogin } from 'api/user'
  */
 export const state = () => ({
   isLogin: /^true$/i.test(localStorage.getItem('islogin')) || false,
-  nick: localStorage.getItem('nick') || '',
   token: localStorage.getItem('token') || '',
   refreshToken: localStorage.getItem('refreshtoken') || '',
   userInfo:
@@ -36,7 +35,6 @@ export const mutations = {
     state.nick = (data.userInfo && data.userInfo.nick) || ''
     localStorage.setItem('token', data.token || '')
     localStorage.setItem('refreshtoken', data.refreshToken || '')
-    localStorage.setItem('nick', (data.userInfo && data.userInfo.nick) || '')
     localStorage.setItem('userinfo', JSON.stringify(data.userInfo))
   }
 }

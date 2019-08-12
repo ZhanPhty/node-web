@@ -11,67 +11,71 @@
         </div>
       </div> -->
       <div class="home-container-list">
-        <list-item :loading="loading" :busy="!busyLoad" :data-source="listData" />
+        <list-item
+          :loading="loading"
+          show-date
+          :load-more="hasNextPage"
+          :data-source="listData"
+          @more="hadleLoadMore"
+        />
       </div>
     </div>
     <!-- 左侧 -->
     <div slot="aside">
-      <div class="home-aside">
-        <h2 class="home-aside__title">热门标签</h2>
+      <div class="page-aside">
+        <h2 class="page-aside__title">热门标签</h2>
         <a-skeleton :loading="loading" active>
-          <ul class="home-aside__tag">
-            <li class="home-aside__tag--item"><a>#php</a></li>
-            <li class="home-aside__tag--item"><a>#less</a></li>
-            <li class="home-aside__tag--item"><a>#服务器</a></li>
-            <li class="home-aside__tag--item"><a>#博客</a></li>
-            <li class="home-aside__tag--item"><a>#精选</a></li>
-            <li class="home-aside__tag--item"><a>#完美编译</a></li>
-            <li class="home-aside__tag--item"><a>#开源</a></li>
-            <li class="home-aside__tag--item"><a>#精选</a></li>
-            <li class="home-aside__tag--item"><a>#完美编译</a></li>
-            <li class="home-aside__tag--item"><a>#开源</a></li>
+          <ul class="page-aside__tag">
+            <li class="page-aside__tag--item"><a>#php</a></li>
+            <li class="page-aside__tag--item"><a>#less</a></li>
+            <li class="page-aside__tag--item"><a>#服务器</a></li>
+            <li class="page-aside__tag--item"><a>#博客</a></li>
+            <li class="page-aside__tag--item"><a>#精选</a></li>
+            <li class="page-aside__tag--item"><a>#完美编译</a></li>
+            <li class="page-aside__tag--item"><a>#开源</a></li>
+            <li class="page-aside__tag--item"><a>#精选</a></li>
+            <li class="page-aside__tag--item"><a>#完美编译</a></li>
+            <li class="page-aside__tag--item"><a>#开源</a></li>
           </ul>
         </a-skeleton>
       </div>
-      <div class="home-aside">
-        <h2 class="home-aside__title">文章分类</h2>
+      <div class="page-aside">
+        <h2 class="page-aside__title">文章分类</h2>
         <a-skeleton :loading="loading" active>
-          <ul class="home-aside__sort">
-            <li class="home-aside__sort--item">
+          <ul class="page-aside__sort">
+            <li class="page-aside__sort--item">
               <a>生活</a>
               <span>(20)</span>
             </li>
-            <li class="home-aside__sort--item">
+            <li class="page-aside__sort--item">
               <a>摄影</a>
               <span>(50)</span>
             </li>
-            <li class="home-aside__sort--item">
+            <li class="page-aside__sort--item">
               <a>技术</a>
               <span>(9)</span>
             </li>
-            <li class="home-aside__sort--item">
+            <li class="page-aside__sort--item">
               <a>CSS</a>
               <span>(10)</span>
             </li>
           </ul>
         </a-skeleton>
       </div>
-      <div class="home-aside">
-        <a-affix :offset-top="90">
-          <h2 class="home-aside__title">热门文章</h2>
-          <a-skeleton :loading="loading" active>
-            <ul class="home-aside__article">
-              <li class="home-aside__article--item">
-                <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
-                <p class="home-aside__article--opt">209阅读<span>•</span>5评论</p>
-              </li>
-              <li class="home-aside__article--item">
-                <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
-                <p class="home-aside__article--opt">209阅读<span>•</span>1评论</p>
-              </li>
-            </ul>
-          </a-skeleton>
-        </a-affix>
+      <div class="page-aside">
+        <h2 class="page-aside__title">热门文章</h2>
+        <a-skeleton :loading="loading" active>
+          <ul class="page-aside__article">
+            <li class="page-aside__article--item">
+              <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
+              <p class="page-aside__article--opt">209阅读<span>•</span>5评论</p>
+            </li>
+            <li class="page-aside__article--item">
+              <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
+              <p class="page-aside__article--opt">209阅读<span>•</span>1评论</p>
+            </li>
+          </ul>
+        </a-skeleton>
       </div>
     </div>
   </page-layout>
@@ -81,18 +85,6 @@
 import listItem from 'components/list/listItem'
 import pageLayout from 'components/common/PageLayout'
 
-const listData = []
-for (let i = 0; i < 10; i++) {
-  listData.push({
-    id: i,
-    href: 'https://vue.ant.design/' + i,
-    title: `又一国产操作系统崛起，中兴新支点OS新版上线!`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    content:
-      '书名看起来很有深度，但是内容通俗易懂，适合大多数大多数的大多数的的普容通俗易懂，适合大多数的普通人，作者也是湖北某一五线城市的普通人，本书讲的是一个精神图腾的故事。'
-  })
-}
-
 export default {
   components: {
     listItem,
@@ -100,12 +92,32 @@ export default {
   },
   data() {
     return {
-      listData,
-      loading: false,
-      busyLoad: false
+      loading: true
     }
   },
-  methods: {}
+  async asyncData({ store, error }) {
+    try {
+      const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList')
+      return {
+        loading: false,
+        listData: items,
+        hasNextPage,
+        nextPage: next
+      }
+    } catch (e) {
+      error({ statusCode: 404 })
+    }
+  },
+  methods: {
+    async hadleLoadMore(list) {
+      const { items, hasNextPage, next } = await this.$store.dispatch('article/handleArticleList', {
+        page: this.nextPage
+      })
+      this.hasNextPage = hasNextPage
+      this.nextPage = next
+      this.listData = list.concat(items)
+    }
+  }
 }
 </script>
 
@@ -117,7 +129,7 @@ export default {
 .home-container {
   &-banner {
     .home-box-show;
-    border-radius: @radiusBase;
+    border-radius: @radiusSmall;
     overflow: hidden;
     background-color: #fff;
 
@@ -155,100 +167,7 @@ export default {
   }
 
   &-list {
-    margin-top: @gap;
-  }
-}
-
-.home-aside {
-  & + .home-aside {
     margin-top: 30px;
-  }
-
-  &__title {
-    font-size: 14px;
-    color: #868686;
-    font-weight: bold;
-    line-height: 1;
-    margin-bottom: 16px;
-  }
-
-  // 标签
-  &__tag {
-    &--item {
-      display: inline-block;
-      margin-bottom: 8px;
-      margin-right: 6px;
-    }
-
-    a {
-      display: inline-block;
-      background-color: #ecedee;
-      color: #9b9b9b;
-      text-decoration: none;
-      padding: 3px 7px 4px 7px;
-      border-radius: 2px;
-      font-size: 12px;
-      transition: all 0.3s;
-
-      &:hover {
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-        transition: all 0.3s;
-      }
-    }
-  }
-
-  // 分类
-  &__sort {
-    &--item {
-      display: inline-block;
-      width: 48%;
-      margin-bottom: 6px;
-    }
-
-    a {
-      color: @colorText;
-
-      &:hover {
-        color: @primary;
-      }
-    }
-
-    span {
-      color: #999;
-    }
-  }
-
-  // 文章
-  &__article {
-    &--item {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-    }
-
-    &--opt {
-      color: #9b9b9b;
-      font-size: 12px;
-      margin-top: 6px;
-
-      span {
-        color: #ccc;
-        margin: 0 8px;
-      }
-    }
-
-    a {
-      color: @colorText;
-      // display: block;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-      // white-space: nowrap;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
 }
 </style>

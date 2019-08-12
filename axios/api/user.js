@@ -6,7 +6,6 @@ import axiosApi from '@/axios/config'
 
 /**
  * 检测用户名是否有效
- * @author 詹鹏辉
  * @createdate 2019-06-20 11:28:19
  * @param {Obj} params              参数
  *              params.account      用户名
@@ -24,7 +23,6 @@ export const checkUserName = params => {
 
 /**
  * 用户注册 - 提交
- * @author 詹鹏辉
  * @createdate 2019-06-20 11:29:35
  * @param {Obj} params              参数
  *              params.account      用户名

@@ -1,44 +1,63 @@
 <template>
   <a-skeleton class="list-container" :loading="loading" active>
-    <a-list item-layout="vertical" size="large" :data-source="dataSource">
+    <div v-if="dataSource.length < 1" class="list-empty">
+      <img :src="empty" />
+      <p>暂无数据</p>
+    </div>
+    <a-list v-else item-layout="vertical" size="large" :data-source="dataSource">
       <a-list-item slot="renderItem" key="item.id" slot-scope="item">
         <a-list-item-meta>
-          <a slot="title" target="_blank" :href="item.href">{{ item.title }}</a>
+          <a slot="title" target="_blank" :href="`/article/${item._id}`">{{ item.title }}</a>
           <template slot="description">
-            <div class="list-container-desc">{{ item.content }}</div>
+            <div class="list-container-desc">{{ item.summary }}</div>
           </template>
         </a-list-item-meta>
-        <div slot="extra">
+        <div v-if="item.cover" slot="extra">
           <div
             class="list-container-cover"
             :style="{
-              backgroundImage: `url(
-                      'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png'
-                    )`
+              backgroundImage: `url(${item.cover})`
             }"
           ></div>
         </div>
         <div slot="actions" class="list-container-action">
-          <span>溜达而</span>
-          <span><a-icon type="message" theme="filled" /> 20</span>
-          <span><a-icon type="read" theme="filled" /> 200</span>
-          <p v-if="showDate" class="list-container-action__date">2018-12-29</p>
+          <span>{{ item.user_info && item.user_info.nick }}</span>
+          <span><a-icon type="message" theme="filled" /> {{ item.review }}</span>
+          <span><a-icon type="read" theme="filled" /> {{ item.read }}</span>
+          <p v-if="showDate" class="list-container-action__date">{{ item.created | formatDate('YMD') }}</p>
         </div>
       </a-list-item>
-      <a-skeleton v-if="!busy" :loading="loading" active />
-      <div slot="footer">
-        <a-button class="list-container-more" block>加载更多</a-button>
+      <div v-if="loadMore" slot="loadMore" style="padding: 20px">
+        <a-skeleton :loading="busy" active />
+        <a-button v-if="!busy" class="list-container-more" block @click="onLoadMore">加载更多</a-button>
       </div>
     </a-list>
   </a-skeleton>
 </template>
 
 <script>
+import empty from 'assets/images/404.svg'
+
 export default {
   props: {
+    /**
+     * 首次加载
+     */
     loading: Boolean,
-    busy: Boolean,
+
+    /**
+     * 加载更多
+     */
+    loadMore: Boolean,
+
+    /**
+     * 是否显示文章列表日期
+     */
     showDate: Boolean,
+
+    /**
+     * 列表数据
+     */
     dataSource: {
       type: Array,
       default() {
@@ -47,64 +66,116 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      /**
+       * 点击‘加载更多’切换列表load效果
+       */
+      busy: false,
+      empty
+    }
+  },
+  watch: {
+    dataSource(arr) {
+      this.busy = false
+    }
+  },
+  methods: {
+    /**
+     * 加载更多
+     * 添加500ms延迟动画更流畅
+     */
+    onLoadMore() {
+      this.busy = true
+      setTimeout(() => {
+        this.$emit('more', this.dataSource)
+      }, 500)
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.list-container-desc {
-  max-height: 44px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  /* autoprefixer: off*/
-  -webkit-box-orient: vertical;
+.list-empty {
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 30px;
+
+  img {
+    height: 140px;
+  }
+
+  p {
+    margin-top: 30px;
+    color: #c1c8c2;
+  }
 }
 
-.list-container-cover {
-  width: 138px;
-  height: 90px;
-  background-size: cover;
-  background-color: #eaedf2;
-}
+.list-container {
+  border-radius: @radiusSmall;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 
-.list-container-more {
-  border-radius: 100px;
-  margin-top: 20px;
-  border: 0;
-  background-color: #dae0e5;
-  color: @colorText;
+  .list-container-desc {
+    max-height: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off*/
+    -webkit-box-orient: vertical;
+  }
 
-  &:hover {
-    opacity: 0.8;
-    background-color: #dce2e7;
+  .list-container-cover {
+    width: 138px;
+    height: 90px;
+    background-size: cover;
+    background-color: #eaedf2;
+  }
+
+  .list-container-more {
+    border-radius: 100px;
+    border: 0;
+    background-color: #dae0e5;
     color: @colorText;
-  }
-}
 
-.list-container-action {
-  font-size: 12px;
-  position: relative;
-
-  span {
-    margin-right: 16px;
-    color: #b4b4b4;
-    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+      background-color: #dce2e7;
+      color: @colorText;
+    }
   }
 
-  &__date {
-    color: #bbb;
-    position: absolute;
-    right: 0;
-    top: 0;
+  .list-container-action {
+    font-size: 12px;
+    position: relative;
+
+    span {
+      margin-right: 16px;
+      color: #b4b4b4;
+      cursor: pointer;
+    }
+
+    &__date {
+      color: #bbb;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 }
 </style>
 
 <style lang="less">
 .list-container {
+  .ant-list-item {
+    padding: 16px 24px;
+    border-color: #f0f0f0;
+  }
+
+  &.ant-skeleton {
+    .ant-list-item;
+  }
+
   .ant-list-item-extra-wrap {
     align-items: center;
   }
@@ -125,7 +196,7 @@ export default {
         color: @colorText;
 
         &:visited {
-          color: #999;
+          color: #979ba5;
         }
 
         &:hover {

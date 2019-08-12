@@ -22,7 +22,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '@/plugins/antd-ui', ssr: true }],
+  plugins: [{ src: '@/plugins/antd-ui', ssr: true }, { src: '@/plugins/filters.js' }],
   /*
    ** Nuxt.js modules
    */

@@ -5,17 +5,7 @@
         <a-input
           v-decorator="['account', { rules: [{ required: true, message: '请输入注册的用户名' }] }]"
           placeholder="请输入注册的用户名"
-        />
-      </a-form-item>
-      <a-form-item>
-        <a-input
-          v-decorator="[
-            'email',
-            {
-              rules: [{ type: 'email', message: '邮箱格式不正确' }, { required: true, message: '请输入邮箱' }]
-            }
-          ]"
-          placeholder="请输入邮箱"
+          autocomplete="new-password"
         />
       </a-form-item>
       <a-form-item>
@@ -32,6 +22,7 @@
           ]"
           placeholder="请输入6~30位的密码"
           type="password"
+          autocomplete="new-password"
           @blur="handleConfirmBlur"
         />
       </a-form-item>
@@ -45,6 +36,19 @@
           ]"
           placeholder="请输入确认密码"
           type="password"
+          autocomplete="new-password"
+        />
+      </a-form-item>
+      <a-form-item>
+        <a-input
+          v-decorator="[
+            'email',
+            {
+              rules: [{ type: 'email', message: '邮箱格式不正确' }, { required: true, message: '请输入邮箱' }]
+            }
+          ]"
+          placeholder="请输入邮箱"
+          autocomplete="new-password"
         />
       </a-form-item>
       <a-form-item>

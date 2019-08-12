@@ -34,25 +34,29 @@
     </div>
     <!-- slot: main -->
     <div slot="main">
-      <list-item :loading="loading" show-date :busy="!busyLoad" :data-source="listData" />
+      <list-item
+        :loading="loading"
+        show-date
+        :load-more="hasNextPage"
+        :data-source="listData"
+        @more="hadleLoadMore"
+      />
     </div>
     <!-- slot: aside -->
-    <div slot="aside" class="home-aside">
-      <a-affix :offset-top="90">
-        <h2 class="home-aside__title">热门文章</h2>
-        <a-skeleton :loading="loading" active>
-          <ul class="home-aside__article">
-            <li class="home-aside__article--item">
-              <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
-              <p class="home-aside__article--opt">209阅读<span>•</span>5评论</p>
-            </li>
-            <li class="home-aside__article--item">
-              <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
-              <p class="home-aside__article--opt">209阅读<span>•</span>1评论</p>
-            </li>
-          </ul>
-        </a-skeleton>
-      </a-affix>
+    <div slot="aside" class="page-aside">
+      <h2 class="page-aside__title">热门文章</h2>
+      <a-skeleton :loading="loading" active>
+        <ul class="page-aside__article">
+          <li class="page-aside__article--item">
+            <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
+            <p class="page-aside__article--opt">209阅读<span>•</span>5评论</p>
+          </li>
+          <li class="page-aside__article--item">
+            <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
+            <p class="page-aside__article--opt">209阅读<span>•</span>1评论</p>
+          </li>
+        </ul>
+      </a-skeleton>
     </div>
   </page-layout>
 </template>
@@ -61,18 +65,6 @@
 import listItem from 'components/list/listItem'
 import pageLayout from 'components/common/PageLayout'
 
-const listData = []
-for (let i = 0; i < 10; i++) {
-  listData.push({
-    id: i,
-    href: 'https://vue.ant.design/' + i,
-    title: `又一国产操作系统崛起，中兴新支点OS新版上线!`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    content:
-      '书名看起来很有深度，但是内容通俗易懂，适合大多数大多数的大多数的的普容通俗易懂，适合大多数的普通人，作者也是湖北某一五线城市的普通人，本书讲的是一个精神图腾的故事。'
-  })
-}
-
 export default {
   components: {
     listItem,
@@ -80,9 +72,30 @@ export default {
   },
   data() {
     return {
-      listData,
-      loading: false,
-      busyLoad: false
+      loading: true
+    }
+  },
+  async asyncData({ store, error }) {
+    try {
+      const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList')
+      return {
+        loading: false,
+        listData: items,
+        hasNextPage,
+        nextPage: next
+      }
+    } catch (e) {
+      error({ statusCode: 404 })
+    }
+  },
+  methods: {
+    async hadleLoadMore(list) {
+      const { items, hasNextPage, next } = await this.$store.dispatch('article/handleArticleList', {
+        page: this.nextPage
+      })
+      this.hasNextPage = hasNextPage
+      this.nextPage = next
+      this.listData = list.concat(items)
     }
   }
 }
@@ -121,48 +134,6 @@ export default {
     }
   }
 }
-
-.home-aside {
-  & + .home-aside {
-    margin-top: 30px;
-  }
-
-  &__title {
-    font-size: 14px;
-    color: #868686;
-    font-weight: bold;
-    line-height: 1;
-    margin-bottom: 16px;
-  }
-
-  // 文章
-  &__article {
-    &--item {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-    }
-
-    &--opt {
-      color: #9b9b9b;
-      font-size: 12px;
-      margin-top: 6px;
-
-      span {
-        color: #ccc;
-        margin: 0 8px;
-      }
-    }
-
-    a {
-      color: @colorText;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
 </style>
 
 <style lang="less">
@@ -179,7 +150,7 @@ export default {
     background-color: #fff;
     border-radius: @radiusSmall;
     font-size: 14px;
-    margin-right: 16px;
+    margin-right: 14px;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.08);
     transition: all 0.3s;
   }

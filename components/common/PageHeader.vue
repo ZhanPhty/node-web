@@ -3,7 +3,18 @@
     <nuxt-link class="header-top__logo" to="/">
       <img :src="navLogo" alt="小灰哥" />
     </nuxt-link>
-    <div class="header-top__opt">
+    <div v-if="isLogin" class="header-top__user">
+      <a-dropdown>
+        <a-avatar :size="40" icon="user" :src="userInfo.cover" />
+        <a-menu slot="overlay" style="min-width: 120px;">
+          <a-menu-item key="user"><a-icon type="user"></a-icon>我的主页</a-menu-item>
+          <a-menu-item key="setting"><a-icon type="setting"></a-icon>设置</a-menu-item>
+          <a-menu-divider />
+          <a-menu-item key="out"><a-icon type="export"></a-icon>退出</a-menu-item>
+        </a-menu>
+      </a-dropdown>
+    </div>
+    <div v-else class="header-top__opt">
       <nuxt-link to="/login">
         <a-button class="header-top__btns">登录</a-button>
       </nuxt-link>
@@ -51,6 +62,7 @@
 <script>
 import navLogo from 'assets/images/nav-logo.png'
 import headerMenu from 'components/common/HeaderMenu'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -61,6 +73,12 @@ export default {
       navLogo,
       drawerVisible: false
     }
+  },
+  computed: {
+    ...mapState({
+      isLogin: state => state.login.isLogin,
+      userInfo: state => state.login.userInfo
+    })
   }
 }
 </script>
@@ -93,6 +111,13 @@ export default {
       right: 46%;
       top: 36%;
     }
+  }
+
+  &__user {
+    float: right;
+    position: relative;
+    margin-left: 10px;
+    cursor: pointer;
   }
 
   &__btns {

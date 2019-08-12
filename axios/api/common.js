@@ -17,3 +17,18 @@ export const getCaptcha = params => {
     params
   )
 }
+
+/**
+ * 上传文件
+ * @param {Obj} params          参数
+ * @return
+ */
+export const uploadFiles = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/upload',
+      method: 'post'
+    },
+    params
+  )
+}

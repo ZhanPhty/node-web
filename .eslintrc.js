@@ -21,6 +21,9 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'vue/no-v-html': 'off'
+    'vue/no-v-html': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/order-in-components': 'off',
+    'vue/attribute-hyphenation': 'off'
   }
 }
