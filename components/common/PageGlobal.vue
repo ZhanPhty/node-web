@@ -18,11 +18,12 @@
 .global-main {
   position: fixed;
   bottom: 0;
+  z-index: 99;
 
   .global-main-right {
     position: fixed;
     right: 30px;
-    bottom: 40px;
+    bottom: 72px;
   }
 
   .global-main-left {

@@ -30,3 +30,17 @@ export const getArticleDetail = ({ id }, params) => {
     params
   )
 }
+
+/**
+ * 获取文章分类
+ * @createdate 2019-08-12 16:49:10
+ */
+export const getArticleTypes = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/select/types',
+      method: 'get'
+    },
+    params
+  )
+}
