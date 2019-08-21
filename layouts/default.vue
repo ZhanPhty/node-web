@@ -157,42 +157,5 @@ export default {
       color: #999;
     }
   }
-
-  // 文章
-  &__article {
-    &--item {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-
-      &:last-child {
-        border-bottom: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    &--opt {
-      color: #9b9b9b;
-      font-size: 12px;
-      margin-top: 6px;
-
-      span {
-        color: #ccc;
-        margin: 0 8px;
-      }
-    }
-
-    a {
-      color: @colorText;
-      // display: block;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-      // white-space: nowrap;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
 }
 </style>

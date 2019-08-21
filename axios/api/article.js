@@ -1,6 +1,20 @@
 import axiosApi from '@/axios/config'
 
 /**
+ * 发布文章
+ * @createdate 2019-08-20 13:39:13
+ */
+export const publishArticles = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/article/section',
+      method: 'post'
+    },
+    params
+  )
+}
+
+/**
  * 获取文章列表
  * @createdate 2019-08-07 09:39:09
  * @param {Number} params.page         页码
@@ -32,13 +46,13 @@ export const getArticleDetail = ({ id }, params) => {
 }
 
 /**
- * 获取文章分类
- * @createdate 2019-08-12 16:49:10
+ * 获取热门文章
+ * @createdate 2019-08-21 16:11:50
  */
-export const getArticleTypes = params => {
+export const getArticleHot = params => {
   return axiosApi.httpServer(
     {
-      url: '/blogapi/select/types',
+      url: '/blogapi/article/hot',
       method: 'get'
     },
     params

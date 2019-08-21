@@ -32,3 +32,16 @@ export const uploadFiles = params => {
     params
   )
 }
+
+/**
+ * 获取banner
+ */
+export const getBanner = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/banner',
+      method: 'get'
+    },
+    params
+  )
+}

@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import store from '@/store'
+import { state } from '@/store/login'
 
 axios.defaults.withCredentials = true
 
@@ -9,6 +9,14 @@ axios.defaults.withCredentials = true
  */
 axios.interceptors.request.use(
   config => {
+    // 这里的config包含每次请求的内容
+    const statefn = state()
+    if (statefn.isLogin) {
+      //  存在将 Authorization 写入 request header
+      config.headers = {
+        Authorization: `Bearer ${statefn.token}`
+      }
+    }
     return config
   },
   error => {
@@ -36,15 +44,8 @@ axios.interceptors.response.use(
         !((config.method === 'get' && config.params.auth) || (config.method === 'post' && config.data.auth))
       ) {
         // store.dispatch('handleClearLoginOut')
-        toast('登录过期或账号权限不足！')
+        toast('登录过期或权限不足！请重新登录')
       }
-    } else if (
-      error.response.status === 403 &&
-      error.response.status === 404 &&
-      error.response.status === 500
-    ) {
-      // 跳转对应的错误页，只存在403、404、500
-      // router.push(`/exception/${error.response.status}`)
     }
     return Promise.reject(error.response)
   }
@@ -58,7 +59,6 @@ axios.interceptors.response.use(
 function errorState(response, showToast) {
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
-    !showToast && toast(response.data.errors || response.data.msg || '网络异常')
     return response.data
   } else {
     return {
@@ -70,7 +70,7 @@ function errorState(response, showToast) {
 
 function successState(res) {
   // 统一判断后端返回的错误码
-  if (res.data && (res.data.code === 200 || res.data.code === 9100)) {
+  if (res.data && res.data.code === 200) {
     return true
   } else {
     res.data === 'object' && toast(res.data.errors || res.data.msg || '网络异常')
@@ -144,16 +144,6 @@ function toast(text, duration) {
  * @return {Obj}
  */
 function deployUse(data = {}) {
-  // let paraStr = ''
-
-  // data.timestamp = new Date().getTime()
-  // for (let value of Object.keys(data).sort()) {
-  //   if (data[value] !== undefined && data[value] !== null) {
-  //     paraStr += data[value].toString()
-  //   }
-  // }
-  // data.auth_key = process.env.VUE_APP_AUTH_KEY
-  // data.token = paraStr + process.env.VUE_APP_TOKEN
   return data
 }
 

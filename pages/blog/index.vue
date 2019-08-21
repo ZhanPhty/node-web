@@ -2,33 +2,20 @@
   <page-layout class="home-container">
     <!-- slot: top -->
     <div slot="top">
-      <a-tabs class="home-tab" default-active-key="1">
-        <a-tab-pane key="1" tab="全部" />
-        <a-tab-pane key="2" tab="分类" />
-        <a-tab-pane key="3" tab="博客" />
-        <a-tab-pane key="4" tab="系统" />
-        <a-tab-pane key="5" tab="热门" />
+      <a-tabs
+        class="home-tab"
+        :active-key="tabActive"
+        v-if="articleCategory.length > 0"
+        @change="onChangeTab"
+      >
+        <a-tab-pane key="" tab="全部" />
+        <a-tab-pane v-for="item in articleCategory" :key="item.name" :tab="item.name" />
       </a-tabs>
       <div class="home-tag-box">
         <ul class="home-tag">
-          <li class="home-tag--item"><a>#php</a></li>
-          <li class="home-tag--item"><a>#less</a></li>
-          <li class="home-tag--item"><a>#服务器</a></li>
-          <li class="home-tag--item"><a>#博客</a></li>
-          <li class="home-tag--item"><a>#精选</a></li>
-          <li class="home-tag--item"><a>#完美编译</a></li>
-          <li class="home-tag--item"><a>#开源</a></li>
-          <li class="home-tag--item"><a>#精选</a></li>
-          <li class="home-tag--item"><a>#完美编译</a></li>
-          <li class="home-tag--item"><a>#开源</a></li>
-          <li class="home-tag--item"><a>#服务器</a></li>
-          <li class="home-tag--item"><a>#博客</a></li>
-          <li class="home-tag--item"><a>#精选</a></li>
-          <li class="home-tag--item"><a>#完美编译</a></li>
-          <li class="home-tag--item"><a>#开源</a></li>
-          <li class="home-tag--item"><a>#精选</a></li>
-          <li class="home-tag--item"><a>#完美编译</a></li>
-          <li class="home-tag--item"><a>#开源</a></li>
+          <li class="home-tag--item" v-for="item in articleTag" :key="item">
+            <a>#{{ item }}</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -46,16 +33,7 @@
     <div slot="aside" class="page-aside">
       <h2 class="page-aside__title">热门文章</h2>
       <a-skeleton :loading="loading" active>
-        <ul class="page-aside__article">
-          <li class="page-aside__article--item">
-            <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
-            <p class="page-aside__article--opt">209阅读<span>•</span>5评论</p>
-          </li>
-          <li class="page-aside__article--item">
-            <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
-            <p class="page-aside__article--opt">209阅读<span>•</span>1评论</p>
-          </li>
-        </ul>
+        <aside-article />
       </a-skeleton>
     </div>
   </page-layout>
@@ -64,38 +42,70 @@
 <script>
 import listItem from 'components/list/listItem'
 import pageLayout from 'components/common/PageLayout'
+import asideArticle from 'components/aside/AsideArticle'
 
 export default {
   components: {
     listItem,
-    pageLayout
+    pageLayout,
+    asideArticle
   },
   data() {
     return {
       loading: true
     }
   },
-  async asyncData({ store, error }) {
+  async asyncData({ store, error, query }) {
     try {
-      const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList')
+      const articleCategory = await store.dispatch('select/handleArticleCategory')
+      const articleTag = await store.dispatch('select/handleArticleTag')
+      const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList', {
+        category: query.category
+      })
+
       return {
         loading: false,
         listData: items,
         hasNextPage,
-        nextPage: next
+        nextPage: next,
+        articleCategory,
+        articleTag,
+        tabActive: query.category || ''
       }
     } catch (e) {
       error({ statusCode: 404 })
     }
   },
+  watch: {
+    /**
+     * 监控路由
+     * 切换路由时重置重新刷新数据
+     */
+    $route({ query }) {
+      this.nextPage = 1
+      this.tabActive = query.category || ''
+      this.hadleLoadMore([])
+    }
+  },
   methods: {
     async hadleLoadMore(list) {
       const { items, hasNextPage, next } = await this.$store.dispatch('article/handleArticleList', {
-        page: this.nextPage
+        page: this.nextPage,
+        category: this.tabActive
       })
       this.hasNextPage = hasNextPage
       this.nextPage = next
       this.listData = list.concat(items)
+    },
+
+    /**
+     * 切换tab
+     * 刷新
+     */
+    onChangeTab(active) {
+      this.$router.push({
+        path: `/blog?category=${active}`
+      })
     }
   }
 }

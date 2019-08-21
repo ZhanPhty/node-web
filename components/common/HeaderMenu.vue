@@ -4,7 +4,9 @@
       v-for="tab in navTabs"
       :key="tab.id"
       class="header-top__tab--item"
+      :class="{ 'nuxt-link-exact-active': $route.path === tab.path }"
       :to="tab.path"
+      exact
       @click.native="onClick"
     >
       <a-icon class="header-top__tab--icon media-header-icon" :type="tab.icon"></a-icon>

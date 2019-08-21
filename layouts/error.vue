@@ -11,8 +11,8 @@
       <div class="exception-content">
         <h1>{{ error.statusCode }}</h1>
         <p class="desc">
-          <span v-if="error.statusCode === 403">抱歉，你无权访问该页面</span>
-          <span v-else-if="error.statusCode === 404">抱歉，你访问的页面不存在</span>
+          <span v-if="error.statusCode === 403">{{ error.message || '抱歉，你无权访问该页面' }}</span>
+          <span v-else-if="error.statusCode === 404">{{ error.message || '抱歉，你访问的页面不存在' }}</span>
           <span v-else>{{ error.message }}</span>
         </p>
         <a-button type="primary" @click="handleToHome">返回首页</a-button>

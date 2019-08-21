@@ -19,7 +19,7 @@
         </div>
       </a-skeleton>
       <a-skeleton class="article-cnt" :loading="loading" :title="false" :paragraph="{ rows: 10 }" active>
-        <div class="article-cnt-work">
+        <div class="article-cnt-work typography-layout">
           <div v-html="detail.content"></div>
         </div>
       </a-skeleton>
@@ -88,19 +88,18 @@ export default {
       loading: true
     }
   },
-  asyncData({ params, error }) {
+  async asyncData({ params, error }) {
     const { id } = params
 
-    return new Promise((resolve, reject) => {
-      getArticleDetail({ id })
-        .then(res => {
-          const { data } = res.data
-          resolve({ detail: data, loading: false })
-        })
-        .catch(() => {
-          error({ statusCode: 404 })
-        })
-    })
+    try {
+      const {
+        data: { data }
+      } = await getArticleDetail({ id })
+
+      return { detail: data, loading: false }
+    } catch (err) {
+      error({ statusCode: 404, message: err.data.msg })
+    }
   }
 }
 </script>
@@ -116,9 +115,10 @@ export default {
 
   &__title {
     word-break: break-word;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
     line-height: 1.4;
+    padding-bottom: 20px;
   }
 }
 

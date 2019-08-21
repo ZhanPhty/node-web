@@ -24,6 +24,8 @@ module.exports = {
     'vue/no-v-html': 'off',
     'vue/require-default-prop': 'off',
     'vue/order-in-components': 'off',
-    'vue/attribute-hyphenation': 'off'
+    'vue/attribute-hyphenation': 'off',
+    'vue/attributes-order': 'off',
+    'no-unused-vars': 'warn'
   }
 }

@@ -30,11 +30,7 @@
         </svg>
       </i>
     </div>
-    <div
-      ref="editorBox"
-      class="editor-box typography-layout"
-      :class="{ 'editor-box-full-icon': isFull }"
-    ></div>
+    <div ref="editorBox" class="editor-box typography-layout" :class="{ 'editor-box-full-icon': isFull }" />
   </div>
 </template>
 
@@ -63,6 +59,8 @@ const toolMenus = [
 
 export default {
   props: {
+    value: [String],
+
     /**
      * 菜单工具栏
      */
@@ -147,9 +145,16 @@ export default {
   },
   data() {
     return {
-      editorContent: '',
+      content: '',
       fullEdit: false,
       editor: null
+    }
+  },
+  watch: {
+    value(val) {
+      if (val !== this.content) {
+        this.editor.txt.html(val)
+      }
     }
   },
   methods: {
@@ -163,7 +168,8 @@ export default {
       this.editor = new Edit(this.$refs.editorBox)
 
       this.editor.customConfig.onchange = html => {
-        this.editorContent = html
+        this.content = html
+        this.$emit('input', html)
       }
 
       // 工具菜单

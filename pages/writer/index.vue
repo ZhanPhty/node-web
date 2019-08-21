@@ -2,17 +2,17 @@
   <div class="writer-main">
     <div class="writer-main-layout">
       <a-input
-        v-model="inputCount"
+        v-model="inputTitle"
         :maxlength="maxlength"
         size="large"
         class="writer-main-title"
         placeholder="请输入文章标题"
       />
-      <div class="writer-main-count">{{ inputCount.length || 0 }}<span>/</span>{{ maxlength }}</div>
-      <editor action="/blogapi/upload" />
+      <div class="writer-main-count">{{ inputTitle.length || 0 }}<span>/</span>{{ maxlength }}</div>
+      <editor v-model="inputContent" action="/blogapi/upload" />
     </div>
     <a-row :gutter="20" class="writer-main-form">
-      <a-form :form="form" @submit="handleSubmit">
+      <a-form :form="form">
         <a-col :sm="24" :md="12">
           <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="文章标签">
             <template v-for="tag in tags">
@@ -26,46 +26,48 @@
               </a-tag>
             </template>
             <template v-if="tags.length < 5">
-              <a-input
+              <a-auto-complete
                 v-if="tagVisible"
                 ref="inputTag"
-                v-model="inputValue"
-                type="text"
-                :style="{ width: '110px' }"
+                v-model="inputTags"
+                style="width: 110px"
                 placeholder="请输入标签"
-                maxlength="8"
-                @change="handleInputChange"
+                :dataSource="articleTag"
+                :defaultActiveFirstOption="false"
                 @blur="handleInputConfirm"
-                @pressEnter="handleInputConfirm"
-              />
+              >
+                <a-input maxlength="8" />
+              </a-auto-complete>
               <a-button v-else type="dashed" @click="showInput"> <a-icon type="plus" /> 添加标签</a-button>
             </template>
             <p class="writer-main-tag__tip">最多添加5个标签</p>
           </a-form-item>
           <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="文章类型">
             <a-select
-              v-decorator="['select', { rules: [{ required: true, message: '请选择文章类型' }] }]"
+              v-decorator="['type', { rules: [{ required: true, message: '请选择文章类型' }] }]"
               placeholder="请选择文章类型"
             >
-              <a-select-option value="china">
-                China
+              <a-select-option v-for="item in articleTypes" :key="item.identify">
+                {{ item.name }}
               </a-select-option>
             </a-select>
           </a-form-item>
           <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="博客分类">
             <a-select
-              v-decorator="['select', { rules: [{ required: true, message: '请选择博客分类' }] }]"
+              v-decorator="['category', { rules: [{ required: true, message: '请选择博客分类' }] }]"
               placeholder="请选择博客分类"
+              allowClear
+              showSearch
             >
-              <a-select-option value="china">
-                China
+              <a-select-option v-for="item in articleCategory" :key="item.name">
+                {{ item.name }}
               </a-select-option>
             </a-select>
           </a-form-item>
           <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="私密文章">
-            <a-radio-group v-decorator="['radio-group']">
-              <a-radio value="1">是</a-radio>
-              <a-radio value="2">否</a-radio>
+            <a-radio-group v-decorator="['isPrivate', { initialValue: false }]">
+              <a-radio :value="true">是</a-radio>
+              <a-radio :value="false">否</a-radio>
             </a-radio-group>
             <div class="writer-main-seo" @click="isSeo = !isSeo">高级设置</div>
           </a-form-item>
@@ -89,17 +91,17 @@
             <p class="writer-main-tag__tip">建议图片尺寸：150 * 100</p>
           </a-form-item>
         </a-col>
-        <a-col :sm="24" :md="24" v-if="isSeo">
+        <a-col v-if="isSeo" :sm="24" :md="24">
           <a-divider orientation="left" dashed><span style="color: #aaa">SEO优化</span></a-divider>
           <a-col :sm="24" :md="12">
             <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="Title">
-              <a-input v-decorator="['radio-group']" placeholder="请输入博文的SEO标题" />
+              <a-input v-decorator="['title']" placeholder="请输入博文的SEO标题" />
             </a-form-item>
             <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="Keywords">
-              <a-input v-decorator="['radio-group']" placeholder="请输入博文的SEO关键词使用 ' , ' 分割" />
+              <a-input v-decorator="['keywords']" placeholder="请输入博文的SEO关键词使用 ' , ' 分割" />
             </a-form-item>
             <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="Description">
-              <a-input v-decorator="['radio-group']" placeholder="请输入博文的SEO描述" />
+              <a-input v-decorator="['description']" placeholder="请输入博文的SEO描述" />
             </a-form-item>
           </a-col>
         </a-col>
@@ -107,16 +109,24 @@
     </a-row>
     <a-affix :offsetBottom="0" class="writer-btns">
       <div class="layout-content-mian">
-        <a-button class="writer-btns__item">保存草稿</a-button>
-        <a-button class="writer-btns__item" type="primary">发布</a-button>
+        <a-button class="writer-btns__item" :loading="confirmLoading" @click="handleSubmit('draft')"
+          >保存草稿</a-button
+        >
+        <a-button
+          class="writer-btns__item"
+          :loading="confirmLoading"
+          type="primary"
+          @click="handleSubmit('online')"
+          >发布</a-button
+        >
       </div>
     </a-affix>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import editor from 'components/editor/Editor'
+import { publishArticles } from 'api/article'
 
 export default {
   components: {
@@ -126,7 +136,8 @@ export default {
     return {
       // 标题统计字数
       maxlength: 100,
-      inputCount: '',
+      inputTitle: '',
+      inputContent: '',
 
       // form表单
       form: this.$form.createForm(this),
@@ -139,7 +150,8 @@ export default {
         md: { span: 18 }
       },
       tagVisible: false,
-      inputValue: '',
+      inputTags: '',
+      confirmLoading: false,
 
       // seo
       isSeo: false,
@@ -151,20 +163,27 @@ export default {
       tags: []
     }
   },
-  methods: {
-    ...mapActions({
-      loadTypes: 'select/handleArticleTypes',
-      loadCategory: 'select/handleArticleCategory',
-      loadTags: 'select/handleArticleTag'
-    }),
+  async asyncData({ store, error }) {
+    try {
+      const articleTypes = await store.dispatch('select/handleArticleTypes')
+      const articleCategory = await store.dispatch('select/handleArticleCategory')
+      const articleTag = await store.dispatch('select/handleArticleTag')
 
+      return {
+        articleTypes,
+        articleCategory,
+        articleTag
+      }
+    } catch (e) {
+      error({ statusCode: 404 })
+    }
+  },
+  methods: {
     /**
      * 删除tag
      */
     handleTagClose(removedTag) {
-      console.log(removedTag)
       const tags = this.tags.filter(tag => tag !== removedTag)
-      console.log(tags)
       this.tags = tags
     },
 
@@ -177,25 +196,18 @@ export default {
     },
 
     /**
-     *  更改input值
-     */
-    handleInputChange(e) {
-      this.inputValue = e.target.value
-    },
-
-    /**
      * 提交tag
      */
     handleInputConfirm() {
-      const inputValue = this.inputValue
+      const inputTags = this.inputTags
       let tags = this.tags
-      if (inputValue && tags.indexOf(inputValue) === -1) {
-        tags = [...tags, inputValue]
+      if (inputTags && tags.indexOf(inputTags) === -1) {
+        tags = [...tags, inputTags]
       }
       Object.assign(this, {
         tags,
         tagVisible: false,
-        inputValue: ''
+        inputTags: ''
       })
     },
 
@@ -215,14 +227,65 @@ export default {
     },
 
     /**
-     * 提交
+     * 点击提交按钮
+     * @param {String} status     文章状态草稿-‘draft’、上线-‘online’
      */
-    handleSubmit() {}
-  },
-  mounted() {
-    this.loadTags()
-    this.loadTypes()
-    this.loadCategory()
+    handleSubmit(status) {
+      this.form.validateFields((err, values) => {
+        if (this.inputTitle === '' || this.inputContent === '') {
+          return this.$message.error('文章标题或内容不能为空')
+        }
+        if (!err) {
+          const { title, keywords, description, ...vals } = values
+          const resultParam = {
+            ...vals,
+            title: this.inputTitle,
+            content: this.inputContent,
+            tags: this.tags,
+            cover: this.imageUrl,
+            status,
+            seo: {
+              title,
+              keywords,
+              description
+            }
+          }
+          this.confirmLoading = true
+          this.handleCreate(resultParam)
+        }
+      })
+    },
+
+    /**
+     * 发布文章
+     */
+    handleCreate(vals) {
+      publishArticles(vals)
+        .then(res => {
+          const { id } = res.data.data
+          this.inputTitle = ''
+          this.inputContent = ''
+          this.tags = []
+          this.form.resetFields()
+          this.confirmLoading = false
+
+          this.$confirm({
+            title: `${vals.status === 'online' ? '发布' : '保存'}成功！`,
+            content: `文章${vals.status === 'online' ? '发布' : '保存'}成功，你可以继续发布或预览文章~`,
+            okText: '预览文章',
+            cancelText: '继续发布',
+            onOk: () => {
+              this.$router.push({
+                path: `/article/${id}`
+              })
+            },
+            onCancel: () => {}
+          })
+        })
+        .catch(() => {
+          this.confirmLoading = false
+        })
+    }
   }
 }
 </script>

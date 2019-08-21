@@ -1,15 +1,24 @@
 <template>
   <page-layout class="home-container">
     <div slot="main">
-      <a-carousel class="home-container-banner" autoplay>
-        <div class="home-container-banner__item"><h3>1</h3></div>
-        <div class="home-container-banner__item"><h3>2</h3></div>
+      <a-carousel class="home-container-banner" arrows autoplay>
+        <div slot="prevArrow" class="home-slick-arrow home-slick-arrow__left" style="left: 0">
+          <a-icon type="left" />
+        </div>
+        <div slot="nextArrow" class="home-slick-arrow home-slick-arrow__right" style="right: 0">
+          <a-icon type="right" />
+        </div>
+        <div class="home-container-banner__item" v-for="(item, index) in banners" :key="index">
+          <a :href="item.goUrl || 'javascript:;'" target="_blank">
+            <img :src="item.cover" />
+          </a>
+        </div>
       </a-carousel>
-      <!-- <div class="home-container-hd">
+      <div class="home-container-hd" v-if="notice.length > 0">
         <div class="home-container-hd__alert">
           新的公告！
         </div>
-      </div> -->
+      </div>
       <div class="home-container-list">
         <list-item
           :loading="loading"
@@ -26,16 +35,9 @@
         <h2 class="page-aside__title">热门标签</h2>
         <a-skeleton :loading="loading" active>
           <ul class="page-aside__tag">
-            <li class="page-aside__tag--item"><a>#php</a></li>
-            <li class="page-aside__tag--item"><a>#less</a></li>
-            <li class="page-aside__tag--item"><a>#服务器</a></li>
-            <li class="page-aside__tag--item"><a>#博客</a></li>
-            <li class="page-aside__tag--item"><a>#精选</a></li>
-            <li class="page-aside__tag--item"><a>#完美编译</a></li>
-            <li class="page-aside__tag--item"><a>#开源</a></li>
-            <li class="page-aside__tag--item"><a>#精选</a></li>
-            <li class="page-aside__tag--item"><a>#完美编译</a></li>
-            <li class="page-aside__tag--item"><a>#开源</a></li>
+            <li class="page-aside__tag--item" v-for="item in articleTag" :key="item">
+              <a>#{{ item }}</a>
+            </li>
           </ul>
         </a-skeleton>
       </div>
@@ -43,21 +45,9 @@
         <h2 class="page-aside__title">文章分类</h2>
         <a-skeleton :loading="loading" active>
           <ul class="page-aside__sort">
-            <li class="page-aside__sort--item">
-              <a>生活</a>
-              <span>(20)</span>
-            </li>
-            <li class="page-aside__sort--item">
-              <a>摄影</a>
-              <span>(50)</span>
-            </li>
-            <li class="page-aside__sort--item">
-              <a>技术</a>
-              <span>(9)</span>
-            </li>
-            <li class="page-aside__sort--item">
-              <a>CSS</a>
-              <span>(10)</span>
+            <li class="page-aside__sort--item" v-for="item in articleCategory" :key="item.name">
+              <nuxt-link :to="`/blog?category=${item.name}`">{{ item.name }}</nuxt-link>
+              <span>({{ item.count || 0 }})</span>
             </li>
           </ul>
         </a-skeleton>
@@ -65,16 +55,7 @@
       <div class="page-aside">
         <h2 class="page-aside__title">热门文章</h2>
         <a-skeleton :loading="loading" active>
-          <ul class="page-aside__article">
-            <li class="page-aside__article--item">
-              <a>又一国产操作系统崛起，中兴新支点OS新版上线!</a>
-              <p class="page-aside__article--opt">209阅读<span>•</span>5评论</p>
-            </li>
-            <li class="page-aside__article--item">
-              <a>又一国产操作系统崛起，中兴新支点OS新线!</a>
-              <p class="page-aside__article--opt">209阅读<span>•</span>1评论</p>
-            </li>
-          </ul>
+          <aside-article />
         </a-skeleton>
       </div>
     </div>
@@ -84,25 +65,38 @@
 <script>
 import listItem from 'components/list/listItem'
 import pageLayout from 'components/common/PageLayout'
+import asideArticle from 'components/aside/AsideArticle'
+import { getBanner } from 'api/common'
 
 export default {
   components: {
     listItem,
-    pageLayout
+    pageLayout,
+    asideArticle
   },
   data() {
     return {
-      loading: true
+      loading: true,
+      notice: []
     }
   },
   async asyncData({ store, error }) {
     try {
+      const articleCategory = await store.dispatch('select/handleArticleCategory')
+      const articleTag = await store.dispatch('select/handleArticleTag')
+      const {
+        data: { data }
+      } = await getBanner()
       const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList')
+
       return {
         loading: false,
         listData: items,
         hasNextPage,
-        nextPage: next
+        nextPage: next,
+        articleCategory,
+        articleTag,
+        banners: data
       }
     } catch (e) {
       error({ statusCode: 404 })
@@ -122,8 +116,44 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@arrowHeight: 52px;
+
 .home-box-show {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.home-slick-arrow {
+  display: none !important;
+  width: @arrowHeight - 20;
+  line-height: @arrowHeight;
+  height: @arrowHeight;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  margin-top: -@arrowHeight / 2;
+  opacity: 0.7;
+  color: #fff;
+  font-size: 20px;
+
+  &::before {
+    content: '';
+  }
+
+  &__left {
+    border-top-right-radius: @radiusBase;
+    border-bottom-right-radius: @radiusBase;
+  }
+
+  &__right {
+    border-top-left-radius: @radiusBase;
+    border-bottom-left-radius: @radiusBase;
+  }
+
+  &:hover {
+    opacity: 1;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
 }
 
 .home-container {
@@ -135,6 +165,13 @@ export default {
 
     &__item {
       height: 240px;
+      margin-bottom: -4px;
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
@@ -168,6 +205,16 @@ export default {
 
   &-list {
     margin-top: 30px;
+  }
+}
+</style>
+
+<style lang="less">
+.slick-slider {
+  &:hover {
+    .home-slick-arrow {
+      display: block !important;
+    }
   }
 }
 </style>
