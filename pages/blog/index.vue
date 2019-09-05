@@ -14,7 +14,7 @@
       <div class="home-tag-box">
         <ul class="home-tag">
           <li class="home-tag--item" v-for="item in articleTag" :key="item">
-            <a>#{{ item }}</a>
+            <nuxt-link :to="`/search?tag=${item}`">#{{ item }}</nuxt-link>
           </li>
         </ul>
       </div>

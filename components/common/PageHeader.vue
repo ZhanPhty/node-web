@@ -6,7 +6,9 @@
     <div v-if="isLogin" class="header-top__user">
       <a-dropdown>
         <a-avatar :size="40" icon="user" :src="userInfo.cover" />
-        <a-menu slot="overlay" style="min-width: 120px;">
+        <a-menu slot="overlay" style="min-width: 130px;" @click="bindDropDown">
+          <a-menu-item key="draft"><a-icon type="copy"></a-icon>草稿</a-menu-item>
+          <a-menu-divider />
           <a-menu-item key="user"><a-icon type="user"></a-icon>我的主页</a-menu-item>
           <a-menu-item key="setting"><a-icon type="setting"></a-icon>设置</a-menu-item>
           <a-menu-divider />
@@ -45,15 +47,17 @@
       <!-- 普通菜单 -->
       <div class="header-top__tab media-header-tab">
         <header-menu class="ui-fl" />
-        <a-input-search class="header-top__search media-header-search" placeholder="搜索" />
+        <a-input-search
+          class="header-top__search media-header-search"
+          placeholder="搜索"
+          @search="bindSearch"
+        />
       </div>
       <!-- 右侧操作按钮 -->
       <div class="header-top__right">
-        <nuxt-link to="/writer">
-          <a-button type="primary" icon="edit">
-            <span class="media-header-title">写文章</span>
-          </a-button>
-        </nuxt-link>
+        <a-button type="primary" icon="edit" @click="bindWriter">
+          <span class="media-header-title">写文章</span>
+        </a-button>
       </div>
     </div>
   </div>
@@ -79,6 +83,58 @@ export default {
       isLogin: state => state.login.isLogin,
       userInfo: state => state.login.userInfo
     })
+  },
+  methods: {
+    /**
+     * 搜索
+     */
+    bindSearch(str) {
+      this.$router.push({
+        path: 'search',
+        query: {
+          q: str
+        }
+      })
+    },
+
+    /**
+     * 跳转发布文章页
+     */
+    bindWriter() {
+      if (this.userInfo && this.userInfo.type === 'admin') {
+        this.$router.push({
+          path: '/writer'
+        })
+      } else {
+        this.$message.error('权限不足，无法发布文章，请联系管理员')
+      }
+    },
+
+    /**
+     * 个人操作下拉菜单
+     */
+    bindDropDown({ key }) {
+      switch (key) {
+        case 'out':
+          this.$store.dispatch('login/handleClearLoginOut')
+          break
+        case 'draft':
+          this.$router.push({
+            path: '/user/draft'
+          })
+          break
+        case 'user':
+          this.$router.push({
+            path: `/user/${this.userInfo.id}`
+          })
+          break
+        case 'setting':
+          this.$router.push({
+            path: '/user/setting'
+          })
+          break
+      }
+    }
   }
 }
 </script>

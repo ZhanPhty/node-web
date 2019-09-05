@@ -110,52 +110,5 @@ export default {
     line-height: 1;
     margin-bottom: 16px;
   }
-
-  // 标签
-  &__tag {
-    &--item {
-      display: inline-block;
-      margin-bottom: 8px;
-      margin-right: 6px;
-    }
-
-    a {
-      display: inline-block;
-      background-color: #ecedee;
-      color: #9b9b9b;
-      text-decoration: none;
-      padding: 3px 7px 4px 7px;
-      border-radius: 2px;
-      font-size: 12px;
-      transition: all 0.3s;
-
-      &:hover {
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-        transition: all 0.3s;
-      }
-    }
-  }
-
-  // 分类
-  &__sort {
-    &--item {
-      display: inline-block;
-      width: 48%;
-      margin-bottom: 6px;
-    }
-
-    a {
-      color: @colorText;
-
-      &:hover {
-        color: @primary;
-      }
-    }
-
-    span {
-      color: #999;
-    }
-  }
 }
 </style>

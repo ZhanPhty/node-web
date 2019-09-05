@@ -69,8 +69,8 @@
         已有账号？
         <nuxt-link to="/login">去登陆</nuxt-link>
       </a-form-item>
-      <a-form-item class="reg-btn">
-        <a-button type="primary" block :loading="confirmLoad" @click="handleReg">
+      <a-form-item>
+        <a-button class="reg-btn" type="primary" block :loading="confirmLoad" @click="handleReg">
           注 册
         </a-button>
       </a-form-item>
@@ -162,6 +162,11 @@ export default {
 
 .reg-login {
   color: #aaa;
+}
+
+.reg-btn {
+  background-color: #68bc47;
+  border-color: #68bc47;
 }
 </style>
 

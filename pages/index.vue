@@ -22,7 +22,6 @@
       <div class="home-container-list">
         <list-item
           :loading="loading"
-          show-date
           :load-more="hasNextPage"
           :data-source="listData"
           @more="hadleLoadMore"
@@ -34,22 +33,13 @@
       <div class="page-aside">
         <h2 class="page-aside__title">热门标签</h2>
         <a-skeleton :loading="loading" active>
-          <ul class="page-aside__tag">
-            <li class="page-aside__tag--item" v-for="item in articleTag" :key="item">
-              <a>#{{ item }}</a>
-            </li>
-          </ul>
+          <aside-tag />
         </a-skeleton>
       </div>
       <div class="page-aside">
         <h2 class="page-aside__title">文章分类</h2>
         <a-skeleton :loading="loading" active>
-          <ul class="page-aside__sort">
-            <li class="page-aside__sort--item" v-for="item in articleCategory" :key="item.name">
-              <nuxt-link :to="`/blog?category=${item.name}`">{{ item.name }}</nuxt-link>
-              <span>({{ item.count || 0 }})</span>
-            </li>
-          </ul>
+          <aside-category />
         </a-skeleton>
       </div>
       <div class="page-aside">
@@ -66,13 +56,18 @@
 import listItem from 'components/list/listItem'
 import pageLayout from 'components/common/PageLayout'
 import asideArticle from 'components/aside/AsideArticle'
+import asideCategory from 'components/aside/AsideCategory'
+import asideTag from 'components/aside/AsideTag'
 import { getBanner } from 'api/common'
+import { getArticleRecommend } from 'api/article'
 
 export default {
   components: {
     listItem,
     pageLayout,
-    asideArticle
+    asideArticle,
+    asideCategory,
+    asideTag
   },
   data() {
     return {
@@ -82,20 +77,20 @@ export default {
   },
   async asyncData({ store, error }) {
     try {
-      const articleCategory = await store.dispatch('select/handleArticleCategory')
-      const articleTag = await store.dispatch('select/handleArticleTag')
       const {
         data: { data }
       } = await getBanner()
-      const { items, hasNextPage, next } = await store.dispatch('article/handleArticleList')
+      const {
+        data: {
+          data: { items, hasNextPage, next }
+        }
+      } = await getArticleRecommend()
 
       return {
         loading: false,
         listData: items,
         hasNextPage,
         nextPage: next,
-        articleCategory,
-        articleTag,
         banners: data
       }
     } catch (e) {
@@ -103,13 +98,17 @@ export default {
     }
   },
   methods: {
-    async hadleLoadMore(list) {
-      const { items, hasNextPage, next } = await this.$store.dispatch('article/handleArticleList', {
+    hadleLoadMore(list) {
+      getArticleRecommend({
         page: this.nextPage
       })
-      this.hasNextPage = hasNextPage
-      this.nextPage = next
-      this.listData = list.concat(items)
+        .then(res => {
+          const { items, hasNextPage, next } = res.data.data
+          this.hasNextPage = hasNextPage
+          this.nextPage = next
+          this.listData = list.concat(items)
+        })
+        .catch(() => {})
     }
   }
 }

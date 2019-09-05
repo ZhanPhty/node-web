@@ -3,10 +3,16 @@
     <a-col :span="24">
       <slot name="top"></slot>
     </a-col>
-    <a-col class="page-container-main" :xs="24" :sm="24" :md="16" :xl="17">
+    <a-col
+      class="page-container-main"
+      :xs="24"
+      :sm="24"
+      :md="$slots.aside ? 16 : 24"
+      :xl="$slots.aside ? 17 : 24"
+    >
       <slot name="main"></slot>
     </a-col>
-    <a-col class="page-container-aside" :xs="0" :sm="0" :md="8" :xl="7">
+    <a-col class="page-container-aside" :xs="0" :sm="0" :md="8" :xl="7" v-if="$slots.aside">
       <div class="page-container-aside__bg">
         <slot name="aside"></slot>
       </div>

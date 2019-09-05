@@ -26,6 +26,7 @@ module.exports = {
     'vue/order-in-components': 'off',
     'vue/attribute-hyphenation': 'off',
     'vue/attributes-order': 'off',
-    'no-unused-vars': 'warn'
+    'no-unused-vars': 'warn',
+    'prettier/prettier': 'warn'
   }
 }

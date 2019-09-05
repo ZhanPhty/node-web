@@ -46,11 +46,24 @@
             <a-select
               v-decorator="['type', { rules: [{ required: true, message: '请选择文章类型' }] }]"
               placeholder="请选择文章类型"
+              @change="bindChangeType"
             >
               <a-select-option v-for="item in articleTypes" :key="item.identify">
                 {{ item.name }}
               </a-select-option>
             </a-select>
+          </a-form-item>
+          <a-form-item
+            v-if="isTypeUrl"
+            :colon="false"
+            :label-col="labelCol"
+            :wrapper-col="wrapperCol"
+            label="转载出处"
+          >
+            <a-input
+              v-decorator="['typeUrl', { rules: [{ required: true, message: '请注明转载出处' }] }]"
+              placeholder="请注明转载出处，http://或https://开头"
+            />
           </a-form-item>
           <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="博客分类">
             <a-select
@@ -91,7 +104,7 @@
             <p class="writer-main-tag__tip">建议图片尺寸：150 * 100</p>
           </a-form-item>
         </a-col>
-        <a-col v-if="isSeo" :sm="24" :md="24">
+        <a-col v-show="isSeo" :sm="24" :md="24">
           <a-divider orientation="left" dashed><span style="color: #aaa">SEO优化</span></a-divider>
           <a-col :sm="24" :md="12">
             <a-form-item :colon="false" :label-col="labelCol" :wrapper-col="wrapperCol" label="Title">
@@ -126,9 +139,12 @@
 
 <script>
 import editor from 'components/editor/Editor'
-import { publishArticles } from 'api/article'
+import { publishArticle, editArticle, getArticleDetail } from 'api/article'
 
 export default {
+  meta: {
+    requireAuth: true
+  },
   components: {
     editor
   },
@@ -152,6 +168,7 @@ export default {
       tagVisible: false,
       inputTags: '',
       confirmLoading: false,
+      isTypeUrl: false,
 
       // seo
       isSeo: false,
@@ -160,7 +177,11 @@ export default {
       baseUrl: process.env.VUE_APP_API,
       loading: false,
       imageUrl: '',
-      tags: []
+      tags: [],
+
+      // 编辑模式
+      articleId: '',
+      modalType: 'add'
     }
   },
   async asyncData({ store, error }) {
@@ -212,6 +233,17 @@ export default {
     },
 
     /**
+     * 切换文章类型
+     */
+    bindChangeType(e) {
+      if (e === 'copy') {
+        this.isTypeUrl = true
+      } else {
+        this.isTypeUrl = false
+      }
+    },
+
+    /**
      * 上传封面图
      */
     handleChange(info) {
@@ -251,7 +283,12 @@ export default {
             }
           }
           this.confirmLoading = true
-          this.handleCreate(resultParam)
+          // 请求接口部分
+          if (this.modalType === 'edit') {
+            this.handleEdit(resultParam)
+          } else {
+            this.handleCreate(resultParam)
+          }
         }
       })
     },
@@ -260,7 +297,7 @@ export default {
      * 发布文章
      */
     handleCreate(vals) {
-      publishArticles(vals)
+      publishArticle(vals)
         .then(res => {
           const { id } = res.data.data
           this.inputTitle = ''
@@ -282,9 +319,69 @@ export default {
             onCancel: () => {}
           })
         })
-        .catch(() => {
+        .catch(err => {
+          this.$message.error(err.data.msg)
           this.confirmLoading = false
         })
+    },
+
+    /**
+     * 编辑文章
+     */
+    handleEdit(vals) {
+      editArticle({ id: this.articleId }, vals)
+        .then(res => {
+          const { redirect } = this.$route.query
+
+          this.$message.success('编辑成功！')
+          this.$router.push({
+            path: `${redirect || '/'}`
+          })
+        })
+        .catch(err => {
+          this.$message.error(err.data.msg)
+          this.confirmLoading = false
+        })
+    }
+  },
+  mounted() {
+    const { articleid } = this.$route.query
+
+    // 编辑模式获取详情
+    if (articleid && articleid !== '') {
+      this.articleId = articleid
+      this.modalType = 'edit'
+      getArticleDetail({
+        id: articleid
+      })
+        .then(res => {
+          let setVal = {}
+          const { data } = res.data
+
+          this.inputTitle = data.title
+          this.inputContent = data.content
+          this.imageUrl = data.cover
+          this.tags = data.tags
+          setVal = {
+            type: data.type,
+            category: data.category,
+            isPrivate: data.isPrivate,
+            title: data.seo.title,
+            keywords: data.seo.keywords,
+            description: data.seo.description
+          }
+          if (data.type === 'copy') {
+            this.isTypeUrl = true
+            setVal.typeUrl = data.typeUrl
+          } else {
+            this.isTypeUrl = false
+          }
+
+          this.$nextTick(() => {
+            this.form.setFieldsValue(setVal)
+          })
+        })
+        .catch(() => {})
     }
   }
 }

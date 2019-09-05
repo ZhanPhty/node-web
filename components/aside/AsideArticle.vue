@@ -1,7 +1,7 @@
 <template>
   <ul class="aside__article">
     <li class="aside__article--item" v-for="item in dataSource" :key="item._id">
-      <nuxt-link :to="`/article/${item._id}`">{{ item.title }}</nuxt-link>
+      <a target="_blank" :href="`/article/${item._id}`">{{ item.title }}</a>
       <p class="aside__article--opt">{{ item.review || 0 }}评论<span>•</span>{{ item.read || 0 }}阅读</p>
     </li>
     <li v-if="dataSource.length < 1">

@@ -1,7 +1,7 @@
 {
   "name": "node-web",
   "version": "1.0.0",
-  "description": "My sublime Nuxt.js project",
+  "description": "zhanphty blog",
   "author": "zhanphty",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "js-cookie": "^2.2.0",
     "js-md5": "^0.7.3",
     "nuxt": "^2.8.1",
+    "qrcode.vue": "^1.6.2",
     "wangeditor": "^3.1.1"
   },
   "devDependencies": {

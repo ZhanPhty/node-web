@@ -22,8 +22,9 @@
         </div>
         <div slot="actions" class="list-container-action">
           <span>{{ item.user_info && item.user_info.nick }}</span>
-          <span><a-icon type="message" theme="filled" /> {{ item.review }}</span>
-          <span><a-icon type="read" theme="filled" /> {{ item.read }}</span>
+          <span><a-icon type="message" theme="filled" /> {{ item.review || 0 }}</span>
+          <span><a-icon type="eye" style="font-size: 13px" theme="filled" /> {{ item.read || 0 }}</span>
+          <span><slot name="more" :data="item"></slot></span>
           <p v-if="showDate" class="list-container-action__date">{{ item.created | formatDate('YMD') }}</p>
         </div>
       </a-list-item>

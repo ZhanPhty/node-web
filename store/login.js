@@ -3,7 +3,6 @@ import { userLogin } from 'api/user'
 /**
  * [state 状态]
  * @param {Boolean} isLogin         登录状态
- * @param {String} nick             用户昵称
  * @param {String} token            用户登录凭证
  * @param {String} refreshToken     刷新token凭证
  * @param {Object} userInfo         用户信息
@@ -32,7 +31,9 @@ export const mutations = {
    * [setLogin 设置登录信息状态]
    */
   setLogin(state, data) {
-    state.nick = (data.userInfo && data.userInfo.nick) || ''
+    state.token = data.token || ''
+    state.refreshToken = data.refreshToken || ''
+    state.userInfo = data.userInfo || {}
     localStorage.setItem('token', data.token || '')
     localStorage.setItem('refreshtoken', data.refreshToken || '')
     localStorage.setItem('userinfo', JSON.stringify(data.userInfo))

@@ -3,22 +3,38 @@ const resolve = dir => path.join(__dirname, dir)
 
 export default {
   mode: 'spa',
+  router: {
+    middleware: 'auth'
+  },
   /*
    ** Headers of the page
    */
   head: {
-    title: '博客',
+    title: '小辉哥-不唯美毋宁死',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' },
+      { name: 'renderer', content: 'webkit' },
+      { name: 'format-detection', content: 'telephone=no' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: '詹小辉博客,uizph,前端技术,zph,designer,web,前端开发,原创作品,经验分享'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          '詹小辉官方网站,原创教程、Vue开发、前端技术、行业经验、软件分享、生活摄影,这是一个分享技术的个人平台！'
+      }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }]
   },
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#007bff' },
   /*
    ** Plugins to load before mounting the App
    */
