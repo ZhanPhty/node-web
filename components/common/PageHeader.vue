@@ -116,7 +116,12 @@ export default {
     bindDropDown({ key }) {
       switch (key) {
         case 'out':
-          this.$store.dispatch('login/handleClearLoginOut')
+          this.$store.dispatch('login/handleClearLoginOut').then(() => {
+            this.$message.success('退出成功！')
+            this.$router.push({
+              path: '/'
+            })
+          })
           break
         case 'draft':
           this.$router.push({

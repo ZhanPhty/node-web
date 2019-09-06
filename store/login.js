@@ -28,14 +28,20 @@ export const mutations = {
   },
 
   /**
-   * [setLogin 设置登录信息状态]
+   * [setLogin 设置登录token]
    */
   setLogin(state, data) {
     state.token = data.token || ''
     state.refreshToken = data.refreshToken || ''
-    state.userInfo = data.userInfo || {}
     localStorage.setItem('token', data.token || '')
     localStorage.setItem('refreshtoken', data.refreshToken || '')
+  },
+
+  /**
+   * [setUserInfo 设置用户信息]
+   */
+  setUserInfo(state, data) {
+    state.userInfo = data.userInfo || {}
     localStorage.setItem('userinfo', JSON.stringify(data.userInfo))
   }
 }
@@ -52,6 +58,7 @@ export const actions = {
           resolve(res.data.data)
           commit('ckeckLogin', true)
           commit('setLogin', res.data.data || {})
+          commit('setUserInfo', res.data.data || {})
         })
         .catch(err => {
           reject(err)
@@ -66,5 +73,6 @@ export const actions = {
   handleClearLoginOut({ commit }) {
     commit('ckeckLogin', false)
     commit('setLogin', {})
+    commit('setUserInfo', {})
   }
 }

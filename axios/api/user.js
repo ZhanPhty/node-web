@@ -61,3 +61,42 @@ export const userLogin = params => {
     params
   )
 }
+
+/**
+ * 获取用户信息
+ */
+export const userCenterInfo = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/user/center',
+      method: 'get'
+    },
+    params
+  )
+}
+
+/**
+ * 修改用户信息
+ */
+export const userCenterUpdate = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/user/update',
+      method: 'put'
+    },
+    params
+  )
+}
+
+/**
+ * 重置密码
+ */
+export const userCenterReset = params => {
+  return axiosApi.httpServer(
+    {
+      url: '/blogapi/user/reset',
+      method: 'put'
+    },
+    params
+  )
+}
