@@ -142,7 +142,8 @@ export default {
               this.$message.success('注册成功, 现在可以登录了！')
               this.$router.push('/')
             })
-            .catch(() => {
+            .catch(err => {
+              this.$message.error(err.data.msg)
               this.confirmLoad = false
             })
         }

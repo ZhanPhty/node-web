@@ -47,7 +47,7 @@ export default {
      * 点击保存修改按钮
      */
     bindSavePw() {
-      if (this.oldPw !== '' && this.newPw !== '' && this.confirmPw !== '') {
+      if (this.oldPw !== '' && this.newPw !== '' && this.confirmPw !== '' && this.newPw.length > 5) {
         if (this.newPw === this.confirmPw) {
           this.handleResetPw()
         } else {
@@ -67,10 +67,15 @@ export default {
         newPassword: md5(this.newPw)
       })
         .then(res => {
-          console.log(res)
+          this.$store.dispatch('login/handleClearLoginOut').then(() => {
+            this.$message.success('密码修改成功，请重新登录')
+            this.$router.push({
+              path: '/'
+            })
+          })
         })
         .catch(err => {
-          console.log(err)
+          this.$message.error(err.data.msg)
         })
     }
   }

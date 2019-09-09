@@ -1,7 +1,7 @@
 <template>
   <page-layout class="home-container">
     <div slot="main">
-      <a-carousel class="home-container-banner" arrows autoplay>
+      <a-carousel class="home-container-banner" arrows autoplay v-if="banners.length > 0">
         <div slot="prevArrow" class="home-slick-arrow home-slick-arrow__left" style="left: 0">
           <a-icon type="left" />
         </div>
@@ -161,6 +161,7 @@ export default {
     border-radius: @radiusSmall;
     overflow: hidden;
     background-color: #fff;
+    margin-bottom: 30px;
 
     &__item {
       height: 240px;
@@ -178,7 +179,7 @@ export default {
     position: relative;
     height: 40px;
     line-height: 40px;
-    margin-top: @gap;
+    margin-bottom: @gap;
 
     & > h2 {
       font-size: 16px;
@@ -200,10 +201,6 @@ export default {
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-  }
-
-  &-list {
-    margin-top: 30px;
   }
 }
 </style>

@@ -13,12 +13,25 @@
       <slot name="main"></slot>
     </a-col>
     <a-col class="page-container-aside" :xs="0" :sm="0" :md="8" :xl="7" v-if="$slots.aside">
-      <div class="page-container-aside__bg">
+      <a-affix :offsetTop="80" v-if="asideAffix">
+        <div class="page-container-aside__bg">
+          <slot name="aside"></slot>
+        </div>
+      </a-affix>
+      <div v-else class="page-container-aside__bg">
         <slot name="aside"></slot>
       </div>
     </a-col>
   </a-row>
 </template>
+
+<script>
+export default {
+  props: {
+    asideAffix: [Boolean]
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .page-container {

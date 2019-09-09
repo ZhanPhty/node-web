@@ -1,21 +1,24 @@
 <template>
   <div class="ui-flex comment-list">
-    <a-avatar slot="avatar" :src="dataSource.cover" icon="user" alt="游客" />
+    <a target="_blank" :href="`/user/${dataSource.userId}`">
+      <a-avatar slot="avatar" :src="dataSource.cover" icon="user" alt="游客" />
+    </a>
     <div class="ui-flex__item comment-list-box">
       <h5 class="comment-list__title">
-        <span>
+        <a target="_blank" :href="`/user/${dataSource.userId}`">
           {{ dataSource.nick }}
-        </span>
+        </a>
+        <a-tag v-if="dataSource.isRoot" color="#00a0ff" class="comment-list__author">管理员</a-tag>
         <a-tag v-if="dataSource.author" color="#ffa273" class="comment-list__author">作者</a-tag>
       </h5>
       <div class="comment-list__cnt">
         <label v-if="dataSource.status === '0'" class="comment-list__report">
-          回复<span>
+          回复
+          <a target="_blank" :href="`/user/${dataSource.parentId}`">
             {{ dataSource.parentNick }}
-            <a-tag v-if="dataSource.parentAuthor" color="#ffa273" class="comment-list__author"
-              >作者</a-tag
-            ></span
-          >：
+            <a-tag v-if="dataSource.parentAuthor" color="#ffa273" class="comment-list__author">作者</a-tag>
+          </a>
+          ：
         </label>
         {{ dataSource.content }}
       </div>
@@ -133,6 +136,10 @@ export default {
   &__title {
     font-size: 14px;
     font-weight: normal;
+
+    a {
+      color: @colorText;
+    }
   }
 
   &__author {
@@ -142,16 +149,17 @@ export default {
     padding: 0 2px;
     border-radius: 2px;
     margin-left: 2px;
+    margin-right: 2px;
   }
 
   &__report {
     color: #aaa;
     margin-top: 4px;
 
-    span {
+    a {
       padding-left: 4px;
       padding-right: 4px;
-      color: #406599;
+      color: #4378c4;
     }
   }
 

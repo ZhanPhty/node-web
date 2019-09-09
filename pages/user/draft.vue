@@ -103,25 +103,18 @@ export default {
             okType: 'danger',
             cancelText: '取消',
             onOk: () => {
-              this.bindDel(id)
+              delArticle({ id })
+                .then(() => {
+                  this.nextPage = 1
+                  this.hadleLoadMore([])
+                  this.$message.success('删除成功！')
+                })
+                .catch(() => {})
             },
             onCancel() {}
           })
           break
       }
-    },
-
-    /**
-     * 删除操作
-     */
-    bindDel(id) {
-      delArticle({ id })
-        .then(() => {
-          this.nextPage = 1
-          this.hadleLoadMore([])
-          this.$message.success('删除成功！')
-        })
-        .catch(() => {})
     }
   }
 }

@@ -100,3 +100,45 @@ export const userCenterReset = params => {
     params
   )
 }
+
+/**
+ * 获取用户信息 - 未登录状态通过传id
+ * @params {String} id     用户id
+ */
+export const userCenterOther = ({ id }, params) => {
+  return axiosApi.httpServer(
+    {
+      url: `/blogapi/user/${id}/center`,
+      method: 'get'
+    },
+    params
+  )
+}
+
+/**
+ * 获取用户发布的文章 - 未登录状态通过传id
+ * @params {String} id     用户id
+ */
+export const userCenterArticle = ({ id }, params) => {
+  return axiosApi.httpServer(
+    {
+      url: `/blogapi/user/${id}/article`,
+      method: 'get'
+    },
+    params
+  )
+}
+
+/**
+ * 获取用户喜欢的文章 - 未登录状态通过传id
+ * @params {String} id     用户id
+ */
+export const userCenterLike = ({ id }, params) => {
+  return axiosApi.httpServer(
+    {
+      url: `/blogapi/user/${id}/like`,
+      method: 'get'
+    },
+    params
+  )
+}

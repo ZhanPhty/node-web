@@ -13,9 +13,16 @@
       </a-skeleton>
       <a-skeleton class="article-cover" :loading="loading" :paragraph="{ rows: 0 }" active avatar>
         <div class="ui-flex ui-flex__center">
-          <a-avatar size="large" icon="user" class="article-cover__img" :src="detail.userInfo.cover" />
+          <a target="_blank" :href="`/user/${detail.userInfo && detail.userInfo.id}`">
+            <a-avatar size="large" icon="user" class="article-cover__img" :src="detail.userInfo.cover" />
+          </a>
           <div class="ui-flex__item article-cover__name">
-            <p>{{ detail.userInfo.nick }}</p>
+            <p>
+              <a target="_blank" :href="`/user/${detail.userInfo && detail.userInfo.id}`">{{
+                detail.userInfo.nick
+              }}</a>
+              <a-tag color="#00a0ff" class="article-cover__tag">Lv{{ detail.userInfo.level || 0 }}</a-tag>
+            </p>
             <div>
               <span>{{ detail.created | formatDate }}</span>
               <span>评论 {{ detail.review }}</span>
@@ -286,11 +293,25 @@ em {
 
   &__name {
     font-size: 16px;
+
+    a {
+      color: @colorText;
+    }
+
     span {
       margin-right: 16px;
       font-size: 12px;
       color: #b9bfc3;
     }
+  }
+
+  &__tag {
+    line-height: 13px;
+    font-size: 12px;
+    height: 15px;
+    padding: 0 2px;
+    border-radius: 2px;
+    margin-left: 2px;
   }
 }
 
