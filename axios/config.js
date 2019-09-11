@@ -13,10 +13,14 @@ axios.interceptors.request.use(
     const statefn = state()
     if (statefn.isLogin) {
       //  存在将 Authorization 写入 request header
-      config.headers = {
-        Authorization: `Bearer ${statefn.token}`
-      }
+      config.headers.Authorization = `Bearer ${statefn.token}`
     }
+
+    // if (config.method === 'post') {
+    //   config.data = qs.stringify({
+    //     ...config.data
+    //   })
+    // }
     return config
   },
   error => {
