@@ -62,7 +62,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://39.99.34.87',
+      target: 'http://127.0.0.1:3200',
       pathRewrite: {
         '^/api': '/'
       }

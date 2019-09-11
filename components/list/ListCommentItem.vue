@@ -175,9 +175,7 @@ export default {
   }
 
   &__opt {
-    position: absolute;
-    right: 0;
-    top: 0;
+    float: right;
 
     & > span {
       margin-left: 28px;

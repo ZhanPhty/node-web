@@ -16,11 +16,11 @@
         </a-menu>
       </a-dropdown>
     </div>
-    <div v-else class="header-top__opt">
+    <div v-else class="media-header-btns header-top__opt">
       <nuxt-link to="/login">
         <a-button class="header-top__btns">登录</a-button>
       </nuxt-link>
-      <nuxt-link to="/reg">
+      <nuxt-link to="/reg" class="media-header-btns__reg">
         <a-button class="header-top__btns">注册</a-button>
       </nuxt-link>
     </div>
@@ -36,9 +36,9 @@
         placement="top"
         :closable="false"
         :visible="drawerVisible"
-        :z-index="1"
+        :z-index="7"
         :wrap-style="{
-          paddingTop: '44px'
+          paddingTop: '52px'
         }"
         @close="drawerVisible = false"
       >

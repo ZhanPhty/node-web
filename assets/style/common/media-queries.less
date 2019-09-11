@@ -14,6 +14,11 @@
     display: inline-block;
     vertical-align: middle;
   }
+
+  @media @mini {
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 // 导航栏正常形态菜单
@@ -22,6 +27,10 @@
   vertical-align: middle;
 
   @media @mobile {
+    display: none;
+  }
+
+  @media @mini {
     display: none;
   }
 }
@@ -45,3 +54,69 @@
     }
   }
 }
+
+.media-header-btns {
+  @media @mini {
+    &::after {
+      display: none;
+    }
+  
+    &__reg {
+      display: none;
+    }
+  }
+}
+
+.media-banner {
+  @media @tablet {
+    height: 220px !important;
+  }
+
+  @media @mini {
+    height: 160px !important;
+  }
+}
+
+// 适配移动模式 -> start
+.ant-list-item-extra {
+  @media @mini {
+    display: none;
+  }
+}
+
+.footer-main {
+  @media @mini {
+    display: inline;
+  }
+}
+
+.layout-content-mian {
+  @media @mini {
+    padding: 0;
+  }
+}
+
+.page-header  {
+  @media @mini {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+.page-container {
+  @media @mini {
+    margin: 0 !important;
+  }
+}
+
+.page-container-main {
+  @media @mini {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+.ui-flex.page-container-main {
+  flex-direction: column;
+}
+// 适配移动模式 -> end

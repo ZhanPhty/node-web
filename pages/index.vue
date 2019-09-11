@@ -8,7 +8,7 @@
         <div slot="nextArrow" class="home-slick-arrow home-slick-arrow__right" style="right: 0">
           <a-icon type="right" />
         </div>
-        <div class="home-container-banner__item" v-for="(item, index) in banners" :key="index">
+        <div class="home-container-banner__item media-banner" v-for="(item, index) in banners" :key="index">
           <a :href="item.goUrl || 'javascript:;'" target="_blank">
             <img :src="item.cover" />
           </a>

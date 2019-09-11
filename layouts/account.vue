@@ -1,6 +1,6 @@
 <template>
   <a-layout class="account-content">
-    <a-layout-content class="layout-content-mian">
+    <a-layout-content>
       <div class="account-layout">
         <div class="account-layout-logo">
           <nuxt-link to="/">
@@ -56,7 +56,7 @@ export default {
 }
 
 .account-layout {
-  padding-top: 100px;
+  padding-top: 80px;
 }
 
 .account-layout-logo {
@@ -90,7 +90,7 @@ export default {
 }
 
 .account-layout-cnt {
-  width: 440px;
+  max-width: 440px;
   background-color: #fff;
   margin: 30px auto 20px auto;
   padding: 30px 40px;

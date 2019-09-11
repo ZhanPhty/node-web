@@ -2,14 +2,15 @@
 
 // Breakpoint values
 
-@small: 640px;
+@small: 320px;
 @medium: 768px;
 @large: 980px;
 @xLarge: 1480px;
 @xxLarge: 1600px;
 
 // Breakpoint @media @mobile {}
-@mobile:  ~"(max-width: 768px)";
+@mini: ~"(max-width: 490px)";
+@mobile:  ~"only screen and (min-width: 491px) and (max-width: 768px)";
 @tablet:  ~"only screen and (min-width: 769px) and (max-width: 980px)";
 @desktop: ~"only screen and (min-width: 981px) and (max-width: 1480px)";
 @desktop-xl:   ~"only screen and (min-width: 1481px) and (max-width: 1600px)";
